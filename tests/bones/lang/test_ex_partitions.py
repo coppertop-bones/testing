@@ -13,8 +13,8 @@ xfail = pytest.mark.xfail
 
 from coppertop.pipe import *
 from bones.core.sentinels import Missing
-from bones.lang.symbol_table import SymTab
-import bones.lang.symbol_table
+from bones.kernel.symbol_table import SymbolTable
+import bones.kernel.symbol_table
 # from bones.lang.infer import InferenceLogger
 
 from bones.lang._testing_.utils import stripSrc, pace, evalPyInComments, errorMsg, pace_, newKernel
@@ -26,7 +26,7 @@ import coppertop.dm.pp, coppertop.dm.testing
 from coppertop.dm.core.types import litint, littxt, void, litnum, num, index, txt, T1, T2, T3, T4, T5, bool, count, pylist
 from _ import *
 
-bones.lang.symbol_table.PYCHARM = True
+bones.kernel.symbol_table.PYCHARM = True
 
 
 @xfail(reason='needs love')

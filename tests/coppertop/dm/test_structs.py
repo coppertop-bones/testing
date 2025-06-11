@@ -116,7 +116,7 @@ def test_me():
 import numpy as np
 
 
-class nd_(np.ndarray):
+class _nd(np.ndarray):
     def __rrshift__(self, arg):  # so doesn't get in the way of arg >> func
         return NotImplemented
 
@@ -134,16 +134,16 @@ class nd_(np.ndarray):
 
 
 @coppertop
-def T(A:nd_):
+def T(A:_nd):
     return A.T
 
 @coppertop
-def allTrue(A:nd_):
+def allTrue(A:_nd):
     return bool(A.all())
 
 
 def test_nd_():
-    assert ((nd_([[1, 2], [3, 4]]) >> T >> T) == (nd_([[1, 3], [2, 4]]) >> T >> T >> T)) >> allTrue
+    assert ((_nd([[1, 2], [3, 4]]) >> T >> T) == (_nd([[1, 3], [2, 4]]) >> T >> T >> T)) >> allTrue
 
 
 

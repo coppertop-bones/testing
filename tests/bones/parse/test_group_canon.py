@@ -8,24 +8,32 @@
 # **********************************************************************************************************************
 
 from glob import glob
-import os
-from bones.lang import lex
-from coppertop.dm.pp import PP
+import os.path, pytest
+from bones.parse import lex
+from bones.lang._testing_.utils import group, newKernel, _
 
 
-def test_lex_canon():
+def collateCanonFfns():
     # home = os.path.expanduser('~/arwen/bones/canon')
     home = os.path.abspath(os.path.join(lex.__file__, '../../../../canon'))
     pfns = glob('**/*.b', root_dir=home, recursive=True)
     assert pfns, f"didn't find bones files in tour path {home}"
+    ffns = []
     for pfn in pfns:
-        os.path.join('bones/canon', pfn) >> PP
-        with open(os.path.join(home, pfn)) as f:
-            tokens, lines = lex.lexBonesSrc(0, f.read())
+        ppPfn = os.path.join('bones/canon', pfn)
+        ffns.append(os.path.join(home, pfn))
+    return ffns
+
+
+@pytest.mark.parametrize('ffn', collateCanonFfns())
+def test_group(ffn):
+    with open(ffn) as f:
+        f.read() >> group(_, newKernel())
 
 
 def main():
-    test_lex_canon()
+    for ffn in collateCanonFfns():
+        test_group(ffn)
 
 
 if __name__ == '__main__':

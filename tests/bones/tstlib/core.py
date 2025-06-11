@@ -10,11 +10,11 @@
 import builtins
 
 from coppertop.pipe import *
-from coppertop.dm._core.structs import tv
+from bones.lang.types import _tv
 from coppertop.dm.core.types import num, index, txt, bool, litint, litnum, littxt, T1, T2, N
 
-true = tv(bool, True)
-false = tv(bool, False)
+true = _tv(bool, True)
+false = _tv(bool, False)
 
 @coppertop(name='id')
 def ID(x:T1) -> T1:
@@ -74,7 +74,7 @@ def add(a:litnum, b:litnum) -> litnum:
 def sub(a:num, b:num) -> num:
     return a - b
 
-fred = tv(litint, 1)
+fred = _tv(litint, 1)
 
 @coppertop(style=binary, name='*')
 def mul(a: litint, b: litint) -> litint:

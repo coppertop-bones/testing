@@ -18,16 +18,16 @@ from coppertop.dm.core import collect, interleave
 from coppertop.dm.pp import PP
 from coppertop.dm.core.types import txt, index, num, bool, T1, litint, pylist
 from bones.ts.metatypes import BTAtom
-from coppertop.dm._core.structs import tv
+from bones.lang.types import _tv
 
 from coppertop._testing_.int_adders import addOne, eachAddOne, eachAddTwo
 
 
 A = BTAtom("A")
 B = BTAtom("B")
-(A & B & litint).setCoercer(tv)
-(A & litint).setCoercer(tv)
-(B & litint).setCoercer(tv)
+(A & B & litint).setCoercer(_tv)
+(A & litint).setCoercer(_tv)
+(B & litint).setCoercer(_tv)
 
 
 
