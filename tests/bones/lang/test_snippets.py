@@ -121,14 +121,15 @@ def test_fun(**ctx):
         addOne: {[x:litint] <:litint> x + 1}                            // type info needed here since we are overloading addOne and in dynamic dispatch mode
         addOne: {[x:littxt] <:littxt> x join "One"}
           
-        (1, "Two ") to <:pylist> :fred collect {x addOne} :joe PP
+        (1, "Two ") to <:pylist> :fred PP collect {x addOne} :joe PP
         
         sally: fred collect {                                           // since there is no overload [x:litint + littxt] <:litint + littxt>  is not needed here
-            x typeOf == <:litint> ifTrue: {
+            fn: x typeOf == <:litint> ifTrue: {
                 x + 1
             } ifFalse: {
                 x join "One"
             }
+            fn(x)
         }
         joe check equals sally
         
@@ -138,8 +139,8 @@ def test_fun(**ctx):
     ctx['EE'] = print
     with context(**ctx):
         res = k.pace(src)
-        res.result >> typeOf >> check >> equals >> bool
-        res.result._v >> check >> equals >> True
+        res.result >> typeOf >> check >> equals >> pylist
+        res.result >> check >> equals >> [2, '"Two ""One"']
 
 
 @bones_lang
