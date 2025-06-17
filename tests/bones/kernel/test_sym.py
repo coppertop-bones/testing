@@ -7,7 +7,7 @@
 # License. See the NOTICE file distributed with this work for additional information regarding copyright ownership.
 # **********************************************************************************************************************
 
-from bones.kernel.sym import SymManager
+from bones.kernel.sym_manager import SymManager
 
 
 def test():

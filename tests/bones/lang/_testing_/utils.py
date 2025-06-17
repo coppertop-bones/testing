@@ -8,7 +8,6 @@
 # **********************************************************************************************************************
 
 from coppertop.pipe import *
-from bones.kernel import psm
 from bones.kernel.bones import BonesKernel
 from bones.kernel.core import GLOBAL_CTX, SCRATCH_CTX
 from bones.kernel.symbol_table import SymbolTable
@@ -22,19 +21,18 @@ from coppertop.dm.core.structs import _tvstruct, _tvtuple
 from bones.parse import lex
 from bones.core.errors import GroupError
 from bones.parse.parse_groups import parseStructure, TUPLE_NULL, TUPLE_OR_PAREN, TUPLE_2D, TUPLE_0_EMPTY, TUPLE_1_EMPTY, \
-    TUPLE_2_EMPTY, TUPLE_3_EMPTY, TUPLE_4_PLUS_EMPTY, SnippetGp
+    TUPLE_2_EMPTY, TUPLE_3_EMPTY, TUPLE_4_PLUS_EMPTY, SnippetGrp
 from bones.core.sentinels import function, Missing
 
 
 def newKernel():
-    sm = psm.PythonStorageManager()
-    k = BonesKernel(sm, litdateCons=litdate, litsymCons=litsym, littupCons=_tvtuple, litstructCons=_tvstruct, litframeCons=dframe)
+    k = BonesKernel(litdateCons=litdate, litsymCons=litsym, littupCons=_tvtuple, litstructCons=_tvstruct, litframeCons=dframe)
     k.ctxs[GLOBAL_CTX] = SymbolTable(k, Missing, Missing, Missing, Missing, GLOBAL_CTX)
     k.ctxs[SCRATCH_CTX] = scratchCtx = SymbolTable(k, Missing, Missing, Missing, k.ctxs[GLOBAL_CTX], SCRATCH_CTX)
     k.scratch = scratchCtx
     k.tcrunner = TCInterpreter(k, scratchCtx)
-    sm.frameForSymTab(k.ctxs[GLOBAL_CTX])
-    sm.frameForSymTab(k.ctxs[SCRATCH_CTX])
+    k.sm.frameForSymTab(k.ctxs[GLOBAL_CTX])
+    k.sm.frameForSymTab(k.ctxs[SCRATCH_CTX])
     return k
 
 @coppertop
@@ -84,7 +82,7 @@ def group_(src:txt, k) -> function:
     return lambda : src >> group(_, k)
 
 @coppertop
-def bb(g:SnippetGp) -> txt:
+def bb(g:SnippetGrp) -> txt:
     return g.PPGroup
 
 @coppertop

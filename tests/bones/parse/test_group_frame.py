@@ -59,3 +59,6 @@ def test_group_frame():
     ''' >> forcase >> 'keyed frame' >> group >> bb >> check >> equals >> '([l {:int}] (l; l) t {:s0}, (l; l) t {:s1})'
 
 
+if __name__ == '__main__':
+    test_group_frame()
+    print('pass')
