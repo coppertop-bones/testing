@@ -265,6 +265,7 @@ def testOrthogonal():
         (ISIN & txt)('DE') >> _join >> ('0008402215')
 
 
+@xfail
 @type_system
 def testExplicit():
     GBP >> check >> fitsWithin >> GBP

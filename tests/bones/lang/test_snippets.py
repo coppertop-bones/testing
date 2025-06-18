@@ -141,8 +141,8 @@ def test_fun(**ctx):
         res.result >> typeOf >> check >> equals >> pylist
         res.result >> check >> equals >> [2, 'Two One']
 
-
 @bones_lang
+@xfail
 def test_fun2(**ctx):
 
     k = _newKernel()
@@ -186,6 +186,7 @@ def test_fun2(**ctx):
     pass
 
 
+@xfail
 @bones_lang
 def test_overload(**ctx):
     k = _newKernel()

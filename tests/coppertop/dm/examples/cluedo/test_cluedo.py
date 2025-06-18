@@ -46,6 +46,12 @@ def test():
     ]
 
     like = {0 :100, 1 :10, 2 :5, 3 :0}
+
+    bag = createBag(Me, [Ki, Di, Le, Da, Ca], {Gr: 5, Or: 4, Pe: 4})
+    bag = bag >> processResponses >> events
+    bag = bag >> processSuggestions(_, _, like)
+    bag = bag >> events
+
     bag = createBag(Me, [Ki, Di, Le, Da, Ca], {Gr: 5, Or: 4, Pe: 4}) \
           >> figureKnown >> events >> processResponses >> events >> processSuggestions(_, _, like) >> events
     bag >> PP

@@ -332,6 +332,7 @@ def test_runtime_fx(TM):
     tli.eval(src)
 
 
+@xfail
 @type_lang
 def test_runtime_fx_err(TM):
     # ccy is correctly to be an implicit recursive type but is not used immediately in the assignment

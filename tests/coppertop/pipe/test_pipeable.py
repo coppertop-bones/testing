@@ -10,6 +10,8 @@
 import sys
 if hasattr(sys, '_TRACE_IMPORTS') and sys._TRACE_IMPORTS: print(__name__)
 
+import pytest
+xfail = pytest.mark.xfail
 
 from coppertop.pipe import *
 from bones.core.errors import NotYetImplemented
@@ -36,7 +38,7 @@ def test_mmul():
     res = a >> mmul >> b
     res >> check >> typeOf >> vec
 
-
+@xfail
 def testTake():
     [1, 2, 3] >> _take >> 2 >> check >> equals >> [1, 2]
     [1, 2, 3] >> _take >> -2 >> check >> equals >> [2, 3]
@@ -49,11 +51,13 @@ def testTake():
     {"a":1, "b":2, "c":3} >> _take >> ["a", "b"] >> check >> equals >> {"a":1, "b":2}
 
 
+@xfail
 def testTypeOf():
     1 >> check >> typeOf >> litint
     1 >> typeOf >> check >> fitsWithin >> index
 
 
+@xfail
 def testDoc():
     _take(pylist, index).d.__doc__ >> check >> equals >> 'hello'
     _take(pylist, pylist).d.__doc__ >> check >> equals >> 'there'

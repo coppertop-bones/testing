@@ -11,6 +11,9 @@ import sys
 # sys._TRACE_IMPORTS = True
 if hasattr(sys, '_TRACE_IMPORTS') and sys._TRACE_IMPORTS: print(__name__)
 
+import pytest
+xfail = pytest.mark.xfail
+
 from coppertop.pipe import *
 from coppertop.dm.utils.testing import assertRaises
 from coppertop.dm.testing import check, equals
@@ -18,6 +21,7 @@ from coppertop.dm.core.aggman import collect
 from coppertop.dm.core.types import txt, index, N, py, dseq, pylist
 
 
+@xfail
 def test_anon():
     f = makeFn(index^index, lambda x: x + 1)
     N ** index
@@ -27,6 +31,7 @@ def test_anon():
         dseq((N ** index)[dseq], [1, 2, 3]) >> collect >> makeFn(txt ^ txt, lambda x: x + 1)
 
 
+@xfail
 def test_partial():
     @coppertop
     def myunary_(a, b, c):

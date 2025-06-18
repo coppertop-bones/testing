@@ -9,6 +9,8 @@
 
 import math, time, itertools, numpy as np, pytest
 
+slow = pytest.mark.slow
+
 from bones import qu
 
 from coppertop.pipe import *
@@ -147,7 +149,7 @@ def test_fill_matrix():
     return "test_fill_matrix passed"
 
 
-@pytest.mark.skip
+@slow
 def test_lognormal_martingale(numRuns):
     N, M = 365, 10_000
     f0 = 0.05

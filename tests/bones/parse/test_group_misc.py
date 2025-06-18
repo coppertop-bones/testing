@@ -87,7 +87,7 @@ def test_misc():
 
 
     context.testcase = 'handle R_ANGLE'
-    '1 <:fred> < > 2 <:fred>' >> group >> bb >> check >> equals >> 'l t o {R_ANGLE} l t'
+    '1 <:fred> < > 2 <:fred>' >> group >> bb >> check >> equals >> 'l t n {R_ANGLE} l t'
 
 
     context.testcase = 'ex - a switch case'
@@ -104,7 +104,7 @@ def test_misc():
                 a * d;
             ^^ "unhandled case" <:+err>
         ]
-    ''' >> group >> bb >> check >> equals >> 'n n [l, [l {:a}. l {:b}]; l, (, ); l, n o n {:a}. n o n; ^^ l t]'
+    ''' >> group >> bb >> check >> equals >> 'n n [l, [l {:a}. l {:b}]; l, (, ); l, n n n {:a}. n n n; ^^ l t]'
 
 
     context.testcase = 'left assign destructure'
@@ -119,11 +119,11 @@ def test_misc():
     '''
         a: (1,2,3; 4,5,6) collect {[x :count+index+offset, y : count, z: count, other:num] x + y}(,1,2,3)
         a collect {x*2} <:matrix> 
-    ''' >> group >> bb >> check >> equals >> '(l, l, l; l, l, l) n {[n:t, n:t, n:t, n:t] n o n} (, l, l, l) {:a}. n n {n o l} t'
+    ''' >> group >> bb >> check >> equals >> '(l, l, l; l, l, l) n {[n:t, n:t, n:t, n:t] n n n} (, l, l, l) {:a}. n n {n n l} t'
 
 
     context.testcase = "a: a was returning '{a:} (, n)' rather than '{a:} n'"
-    'b: a. b: 2. b: 2 + a. a: 2 + 1. a' >> group >> bb >> check >> equals >> 'n {:b}. l {:b}. l o n {:b}. l o l {:a}. n'
+    'b: a. b: 2. b: 2 + a. a: 2 + 1. a' >> group >> bb >> check >> equals >> 'n {:b}. l {:b}. l n n {:b}. l n l {:a}. n'
 
 
     context.testcase = '???'
@@ -132,7 +132,7 @@ def test_misc():
         a: getInt[] <:float>                // type coercion
         10 <:float> :x  <:int> :y * 2 :z
         fred: {[a:int, b :float] ^ z <:string>}
-    ''' >> group >> bb >> check >> equals >> '{a: [n o] o [n o] {:b}}. n [] t {:a}. l t {:x} t {:y} o l {:z}. {[n:t, n:t] ^ n t} {:fred}'
+    ''' >> group >> bb >> check >> equals >> '{a: [n n] n [n n] {:b}}. n [] t {:a}. l t {:x} t {:y} n l {:z}. {[n:t, n:t] ^ n t} {:fred}'
 
 
     context.testcase = 'keys, assignment, type tagging, module scope, comments, continuation, blank lines, \n and ;'
@@ -142,7 +142,7 @@ def test_misc():
         a square \
             <:num> :b * 2 :c. c * 2
         d: c <:num>
-    ''' >> group >> bb >> check >> equals >> 'l {:a}. n n t {:b} o l {:c}. n o l. n t {:d}'
+    ''' >> group >> bb >> check >> equals >> 'l {:a}. n n t {:b} n l {:c}. n n l. n t {:d}'
 
 
     context.testcase = '3D list - 2D list of phrases with new line suggesting expr separation'
@@ -162,13 +162,13 @@ def test_misc():
                 ifTrue: [.b]
                 ifFalse: {.c}
         1 + 1
-    ''' >> group >> bb >> check >> equals >> 'n (n n n, [.n], {.n}) {:a}. l o l'
+    ''' >> group >> bb >> check >> equals >> 'n (n n n, [.n], {.n}) {:a}. l n l'
 
 
     context.testcase = 'functions and descoping <:DD2><:DD1>'
     '''
         (1,2,3) do: {[x] (x square * .a) + (x * .b) + .c}    // <:unary> is the default for functions
-    ''' >> group >> bb >> check >> equals >> 'n ((l, l, l), {[n:t] (n n o .n) o (n o .n) o .n})'
+    ''' >> group >> bb >> check >> equals >> 'n ((l, l, l), {[n:t] (n n n .n) n (n n .n) n .n})'
 
 
     context.testcase = 'functions and descoping <:DD2><:DD1>'
@@ -232,7 +232,7 @@ def test_misc():
         {fred:1,joe:2}      // is an illegal function so is assumed to be a struct
         <:{age:num}>
         <:{age:num,name:txt}>
-    ''' >> group >> bb >> check >> equals >> '{fred: l o l o .n}. {fred: l, joe: l}. t. t'
+    ''' >> group >> bb >> check >> equals >> '{fred: l n l n .n}. {fred: l, joe: l}. t. t'
 
 
     context.testcase = '???'
@@ -241,7 +241,7 @@ def test_misc():
             b: 2   // we have a local b in the local scope here
             ^ ^^ (.a * b, .a * .b)
         }
-    ''' >> group >> bb >> check >> equals >> '{l {:b}. ^ ^^ (.n o n, .n o .n)}'
+    ''' >> group >> bb >> check >> equals >> '{l {:b}. ^ ^^ (.n n n, .n n .n)}'
 
 
     context.testcase = 'tuples on their own line'

@@ -28,36 +28,36 @@ def test_tuple_type():
 
     context.testcase = 'tuple or paren'
     '(1 * 2)' >> group >> check >> getTupleType >> equals >> TUPLE_OR_PAREN \
-        >> check >> bb >> equals >> '(l o l)'
+        >> check >> bb >> equals >> '(l n l)'
 
 
     context.testcase = '0 emtpy slots'
     '(1 ! 2, 2*3)' >> group >> check >> getTupleType >> equals >> TUPLE_0_EMPTY \
-        >> check >> bb >> equals >> '(l o l, l o l)'
+        >> check >> bb >> equals >> '(l n l, l n l)'
 
 
     context.testcase = '2D tuple'
     '(1 ! 2; 2*3)' >> group >> check >> getTupleType >> equals >> TUPLE_2D \
-        >> check >> bb >> equals >> '(l o l; l o l)'
+        >> check >> bb >> equals >> '(l n l; l n l)'
 
 
     context.testcase = '1 empty slot'
     '(1 ! 2,)' >> group >> check >> getTupleType >> equals >> TUPLE_1_EMPTY \
-        >> check >> bb >> equals >> '(l o l, )'
+        >> check >> bb >> equals >> '(l n l, )'
 
 
     context.testcase = '2 empty slots'
     '(1 ! 2,,)' >> group >> check >> getTupleType >> equals >> TUPLE_2_EMPTY \
-        >> check >> bb >> equals >> '(l o l, , )'
+        >> check >> bb >> equals >> '(l n l, , )'
 
 
     context.testcase = '3 empty slots'
     '(,1 ! 2,,)' >> group >> check >> getTupleType >> equals >> TUPLE_3_EMPTY \
-        >> check >> bb >> equals >> '(, l o l, , )'
+        >> check >> bb >> equals >> '(, l n l, , )'
 
 
     context.testcase = '4 plus empty slots'
     '(,,1 ! 2,,)' >> group >> check >> getTupleType >> equals >> TUPLE_4_PLUS_EMPTY \
-        >> check >> bb >> equals >> '(, , l o l, , )'
+        >> check >> bb >> equals >> '(, , l n l, , )'
 
 

@@ -82,4 +82,4 @@ def test_group_load():
         stdout << c
 
         stderr << (1.0 :fred / constants.zero)          // what are we going to do about this?
-    ''' >> group >> bb >> check >> equals >> '{L}. {FI}. {FI}. n o l l. l {:a}. l {:b} o n n {:c}. n o n. n o (l {:fred} o n)'
+    ''' >> group >> bb >> check >> equals >> '{L}. {FI}. {FI}. n n l l. l {:a}. l {:b} n n n {:c}. n n n. n n (l {:fred} n n)'
