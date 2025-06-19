@@ -8,31 +8,22 @@
 # **********************************************************************************************************************
 
 from coppertop.pipe import *
-from bones.kernel.bones import BonesKernel
-from bones.kernel.core import GLOBAL_CTX, SCRATCH_CTX
-from bones.kernel.symbol_table import SymbolTable
-from bones.parse.lex import LINE_COMMENT
-from bones.execute.tc_interpreter import TCInterpreter
+from bones.kernel.core import BonesKernel
+from bones.kernel.lex import LINE_COMMENT
 from bones.lang.types import litsym, litdate
 from coppertop.dm.testing import check, equals, raises, same
 from coppertop.dm.pp import PP, TT, DD, HH
 from coppertop.dm.core.types import txt, dframe
 from coppertop.dm.core.structs import _tvstruct, _tvtuple
-from bones.parse import lex
-from bones.core.errors import GroupError
-from bones.parse.parse_groups import parseStructure, TUPLE_NULL, TUPLE_OR_PAREN, TUPLE_2D, TUPLE_0_EMPTY, TUPLE_1_EMPTY, \
+from bones.kernel import lex
+from bones.kernel.errors import BonesGroupingError
+from bones.kernel.parse_groups import parseStructure, TUPLE_NULL, TUPLE_OR_PAREN, TUPLE_2D, TUPLE_0_EMPTY, TUPLE_1_EMPTY, \
     TUPLE_2_EMPTY, TUPLE_3_EMPTY, TUPLE_4_PLUS_EMPTY, SnippetGrp
 from bones.core.sentinels import function, Missing
 
 
 def newKernel():
     k = BonesKernel(litdateCons=litdate, litsymCons=litsym, littupCons=_tvtuple, litstructCons=_tvstruct, litframeCons=dframe)
-    k.ctxs[GLOBAL_CTX] = SymbolTable(k, Missing, Missing, Missing, Missing, GLOBAL_CTX)
-    k.ctxs[SCRATCH_CTX] = scratchCtx = SymbolTable(k, Missing, Missing, Missing, k.ctxs[GLOBAL_CTX], SCRATCH_CTX)
-    k.scratch = scratchCtx
-    k.tcrunner = TCInterpreter(k, scratchCtx)
-    k.sm.frameForSymTab(k.ctxs[GLOBAL_CTX])
-    k.sm.frameForSymTab(k.ctxs[SCRATCH_CTX])
     return k
 
 @coppertop

@@ -14,7 +14,6 @@ skip = pytest.mark.skip
 
 
 from coppertop.pipe import *
-from bones.kernel.core import GLOBAL_CTX
 from bones.kernel.symbol_table import SymbolTable
 import bones.kernel.symbol_table
 from bones.lang._testing_.utils import stripSrc, pace as _pace, newKernel

@@ -9,7 +9,7 @@
 
 from glob import glob
 import os
-from bones.parse import lex
+from bones.kernel import lex
 from coppertop.dm.pp import PP
 
 

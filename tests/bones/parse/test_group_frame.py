@@ -21,7 +21,7 @@ def test_group_frame():
             s0: (0.95;0.2) <:probs>                 // missing comma
             s1: (0.05;0.8) <:probs>
         )
-    ''' >> forcase >> 'frame - missing comma' >> group_ >> check >> raises >> GroupError
+    ''' >> forcase >> 'frame - missing comma' >> group_ >> check >> raises >> BonesGroupingError
 
     '''
         ([]
@@ -35,7 +35,7 @@ def test_group_frame():
             [G:`gA`gB`gC`gA`gB`gC L:`l0`l0`l0`l1`l1`l1]   // missing comma, should be `gC, L:`l0
             P: (0.10;0.40;0.99;0.90;0.60;0.01)<:probs>
         )
-    ''' >> forcase >> 'keyed frame - missing comma' >> group_ >> check >> raises >> GroupError
+    ''' >> forcase >> 'keyed frame - missing comma' >> group_ >> check >> raises >> BonesGroupingError
 
     '''
         (

@@ -9,7 +9,7 @@
 
 from glob import glob
 import os.path, pytest
-from bones.parse import lex
+from bones.kernel import lex
 from bones.lang._testing_.utils import group, newKernel, _
 
 

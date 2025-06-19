@@ -48,18 +48,18 @@ def test_group_load():
     load
         dm.core,
     fred
-    ''' >> group_ >> check >> raises >> GroupError
+    ''' >> group_ >> check >> raises >> BonesGroupingError
     
     
     context.testcase = 'nothing specified to load in the phrase'
-    'load' >> group_ >> check >> raises >> GroupError
+    'load' >> group_ >> check >> raises >> BonesGroupingError
     
     
     context.testcase = 'trailing comma causes the error in load #1'
     '''
         load 
             dm.core,        // the trailing comma causes the error
-    ''' >> group_ >> check >> raises >> GroupError
+    ''' >> group_ >> check >> raises >> BonesGroupingError
     
     
     context.testcase = 'load #4'

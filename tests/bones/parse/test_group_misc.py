@@ -21,15 +21,15 @@ def test_misc():
 
 
     context.testcase = 'check empty fn / struct throws'
-    '{}' >> group_ >> check >> raises >> GroupError
+    '{}' >> group_ >> check >> raises >> BonesGroupingError
 
 
     context.testcase = 'type not closed'
-    '<:' >> group_ >> check >> raises >> GroupError
+    '<:' >> group_ >> check >> raises >> BonesGroupingError
 
 
     context.testcase = 'empty parameters'
-    '{[] x}' >> group_ >> check >> raises >> GroupError
+    '{[] x}' >> group_ >> check >> raises >> BonesGroupingError
 
 
     context.testcase = 'check keywords with same indent don\'t merge'
@@ -52,7 +52,7 @@ def test_misc():
 
 
     context.testcase = 'binary can\'t be a struct'
-    '{{fred:1}}' >> group_ >> check >> raises >> GroupError
+    '{{fred:1}}' >> group_ >> check >> raises >> BonesGroupingError
 
 
     context.testcase = 'fn returning a struct'
@@ -64,11 +64,11 @@ def test_misc():
 
 
     context.testcase = 'illegal semi-colon in struct / fn'
-    '{a ; b}' >> group_ >> check >> raises >> GroupError
+    '{a ; b}' >> group_ >> check >> raises >> BonesGroupingError
 
 
     context.testcase = 'illegal comma in fn'
-    '{1. , 2.}' >> group_ >> check >> raises >> GroupError
+    '{1. , 2.}' >> group_ >> check >> raises >> BonesGroupingError
 
 
     context.testcase = 'simple optional terminator'
@@ -79,7 +79,7 @@ def test_misc():
 
 
     context.testcase = 'can\'t use <:...> for annotating parameters'
-    '{[a <:int>, b <:float>] ^ z <:string>}' >> group_ >> check >> raises >> GroupError
+    '{[a <:int>, b <:float>] ^ z <:string>}' >> group_ >> check >> raises >> BonesGroupingError
 
 
     context.testcase = 'use : for annotating parameters'

@@ -15,12 +15,9 @@ skip = pytest.mark.skip
 
 from coppertop.pipe import *
 from bones.core.sentinels import Missing
-from bones.kernel.bones import BonesKernel
-from bones.kernel.core import GLOBAL_CTX, SCRATCH_CTX
-from bones.kernel.symbol_table import SymbolTable
+from bones.kernel.core import BonesKernel
 import bones.kernel.symbol_table
-from bones.parse.lex import LINE_COMMENT, BREAKOUT
-from bones.execute.tc_interpreter import TCInterpreter
+from bones.kernel.lex import LINE_COMMENT, BREAKOUT
 from bones.lang._testing_.utils import stripSrc
 from bones.lang.types import litdate, litsym
 
@@ -38,12 +35,6 @@ bones.kernel.symbol_table.PYCHARM = True
 
 def _newKernel():
     k = BonesKernel(litdateCons=litdate, litsymCons=litsym, littupCons=_tvtuple, litstructCons=_tvstruct, litframeCons=dframe)
-    k.ctxs[GLOBAL_CTX] = SymbolTable(k, Missing, Missing, Missing, Missing, GLOBAL_CTX)
-    k.ctxs[SCRATCH_CTX] = scratchCtx = SymbolTable(k, Missing, Missing, Missing, k.ctxs[GLOBAL_CTX], SCRATCH_CTX)
-    k.scratch = scratchCtx
-    k.tcrunner = TCInterpreter(k, scratchCtx)
-    k.sm.frameForSymTab(k.ctxs[GLOBAL_CTX])
-    k.sm.frameForSymTab(k.ctxs[SCRATCH_CTX])
     return k
 
 class Res: pass
