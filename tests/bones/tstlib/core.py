@@ -11,7 +11,7 @@ import builtins
 
 from coppertop.pipe import *
 from bones.lang.types import _tv
-from coppertop.dm.core.types import num, index, txt, bool, litint, litnum, littxt, T1, T2, N
+from coppertop.dm.core.types import num, index, txt, bool, litint, litnum, littxt, T1, T2, N, t
 
 true = _tv(bool, True)
 false = _tv(bool, False)
@@ -140,8 +140,8 @@ def join(a:txt, b:txt) -> txt:
     return a + b
 
 @coppertop
-def count(a:txt) -> num:
-    return len(a)
+def count(a:txt) -> t.count:
+    return len(a) | t.count
 
 @coppertop
 def toBool(a:txt) -> bool:
