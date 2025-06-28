@@ -72,7 +72,7 @@ def test_ex_partitions(**ctx):
             >> check >> (lambda x: [e[1] for e in x.types]) >> drop >> 2 >> equals >> res.commentTypes
     else:
         context.testcase = 'run partitions'
-        src >> pace(k, _)
+        src >> pace(k, _, None)
         src >> withCtx >> ctx >> check >> pace_(k, _)
         #>> raises >> TypeError
 
@@ -84,7 +84,7 @@ def main():
     debug = dict(showSrc=True, showGroups=False, showTc=True, RESTRICT_NOTES=False, ALL=False)#, tt=InferenceLogger())
     debugNoRun = dict(showSrc=True, showGroups=False, showTc=True, RESTRICT_NOTES=False, ALL=False, run=False)#, tt=InferenceLogger())
 
-    test_partitionExample()
+    test_ex_partitions()
 
 
 
