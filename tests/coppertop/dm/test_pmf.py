@@ -15,11 +15,11 @@ import enum, pytest
 
 from coppertop.pipe import *
 from coppertop.dm.testing import check
-from coppertop.dm.core import sequence, collect, inject
+from coppertop.dm.core import sequence, collect, inject, atSlot, atSlotPut, closeTo
 from coppertop.dm.core.comparisons import equals
 from coppertop.dm.core.types import dstruct
-from coppertop.dm.pmf import uniform, rvAdd, mix, toXsPs, PMF, pmfMul, normalise, L, formatPmf, CMF, quantile
-from _ import SS, PP, at, atSlot, atSlotPut, to, closeTo
+from coppertop.dm.pmf import uniform, rvAdd, mix, toXsPs, PMF, pmfMul, normalise, L, formatPmf, CMF, quantile, at, to
+from coppertop.dm.pp import SS
 
 
 class E(enum.IntEnum):
