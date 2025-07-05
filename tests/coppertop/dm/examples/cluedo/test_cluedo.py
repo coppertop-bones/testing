@@ -10,7 +10,7 @@
 from coppertop.pipe import *
 from coppertop.dm.examples.cluedo.core import *
 from coppertop.dm.examples.cluedo.core import one
-from coppertop.dm.examples.cluedo.algos import createHelper, figureKnown, processResponses, processSuggestions1
+from coppertop.dm.examples.cluedo.simple import createHelper, figureKnown, processResponses, processSuggestions1
 from coppertop.dm.examples.cluedo.reports import rep1
 from coppertop.dm.examples.cluedo.core import cluedo_helper
 from coppertop.dm.pp import PP
