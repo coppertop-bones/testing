@@ -18,8 +18,7 @@ from coppertop.dm.testing import check
 from coppertop.dm.core import sequence, collect, inject, atSlot, atSlotPut, closeTo
 from coppertop.dm.core.comparisons import equals
 from coppertop.dm.core.types import dstruct
-from coppertop.dm.pmf import uniform, rvAdd, mix, toXsPs, PMF, pmfMul, normalise, L, formatPmf, CMF, quantile, at, to, SS
-from coppertop.dm.pp import SS
+from coppertop.dm.pmf import uniform, rvAdd, mix, toXsPs, PMF, pmfMul, normalise, L, formatPmf, CMF, quantile, at, to
 
 
 class E(enum.IntEnum):
