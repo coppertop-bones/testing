@@ -31,6 +31,8 @@ def addTwo(x:txt) -> txt:
 def addTwo(x:txt) -> txt:
     return x + 'Two'
 
+from coppertop._testing_.int_adders import addTwo
+
 
 # test that functions can be redefined in "main"
 with context(halt=True):
