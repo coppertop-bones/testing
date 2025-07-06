@@ -18,7 +18,7 @@ from coppertop.dm.testing import check
 from coppertop.dm.core import sequence, collect, inject, atSlot, atSlotPut, closeTo
 from coppertop.dm.core.comparisons import equals
 from coppertop.dm.core.types import dstruct
-from coppertop.dm.pmf import uniform, rvAdd, mix, toXsPs, PMF, pmfMul, normalise, L, formatPmf, CMF, quantile, at, to
+from coppertop.dm.pmf import uniform, rvAdd, mix, toXsPs, PMF, pmfMul, normalise, L, formatPmf, CMF, quantile, at, to, SS
 from coppertop.dm.pp import SS
 
 
@@ -86,9 +86,8 @@ def test_monty():
     posterior = prior >> pmfMul >> likelihood >> normalise
     posterior >> at >> C >> check >> closeTo(_,_,0.001) >> 0.667
 
-@pytest.mark.skip
-def test_PP():
-    PMF({A: 0.5, B: 0.5}) >> SS >> check >> equals >> 'PMF(A: 0.500, B: 0.500)'
+def test_format():
+    PMF({A: 0.5, B: 0.5}) >> formatPmf >> check >> equals >> 'PMF(A: 0.500, B: 0.500)'
 
 def test_jar():
     @coppertop
@@ -113,6 +112,7 @@ def main():
     test_pmf()
     test_cmf()
     test_jar()
+    test_format()
 
 
 
