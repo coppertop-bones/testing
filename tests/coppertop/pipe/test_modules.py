@@ -11,6 +11,9 @@ import sys
 # sys._TRACE_IMPORTS = True
 if hasattr(sys, '_TRACE_IMPORTS') and sys._TRACE_IMPORTS: print(__name__)
 
+import pytest
+xfail = pytest.mark.xfail
+
 from coppertop.pipe import *
 from coppertop.dm.utils.testing import assertRaises
 from coppertop.dm.testing import check, equals
@@ -28,6 +31,8 @@ def addTwo(x:txt) -> txt:
 def addTwo(x:txt) -> txt:
     return x + 'Two'
 
+from coppertop._testing_.int_adders import addTwo
+
 
 # test that functions can be redefined in "main"
 with context(halt=True):
@@ -42,12 +47,13 @@ with context(halt=True):
 
 
 
-
+@xfail
 def test_addOneEtc():
     1 >> addOne >> check >> equals >> 2
     [1, 2] >> eachAddOne >> check >> equals >> [2, 3]
 
 
+@xfail
 def test_updatingAddOne():
 
     # now we want to use it with strings

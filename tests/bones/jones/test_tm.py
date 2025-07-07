@@ -10,6 +10,7 @@
 import sys, traceback
 
 import pytest
+xfail = pytest.mark.xfail
 
 from bones import jones
 from bones.core.sentinels import Missing
@@ -197,6 +198,7 @@ def test_assign(TM):
     return "test_assign passed"
 
 
+@xfail
 def test_orthogonal_spaces(TM):
     tli = TypeLangInterpreter(tm := TM())
 

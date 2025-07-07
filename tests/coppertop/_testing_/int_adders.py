@@ -31,8 +31,6 @@ def eachAddOne(xs:pylist) -> pylist:
 def addTwo(x:index) -> index:
     return x + 2
 
-from _ import addTwo
-
 @coppertop
 def eachAddTwo(xs:pylist) -> pylist:
     answer = []

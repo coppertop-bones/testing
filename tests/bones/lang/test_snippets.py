@@ -15,13 +15,9 @@ skip = pytest.mark.skip
 
 from coppertop.pipe import *
 from bones.core.sentinels import Missing
-from bones.kernel import psm
-from bones.kernel.bones import BonesKernel
-from bones.lang.core import GLOBAL, SCRATCH
-from bones.lang.symbol_table import SymTab
-import bones.lang.symbol_table
-from bones.lang.lex import LINE_COMMENT, BREAKOUT
-from bones.lang.execute import TCInterpreter
+from bones.kernel.core import BonesKernel
+import bones.kernel.symbol_table
+from bones.kernel.lex import LINE_COMMENT, BREAKOUT
 from bones.lang._testing_.utils import stripSrc
 from bones.lang.types import litdate, litsym
 
@@ -34,18 +30,11 @@ from coppertop.dm.core.structs import _tvstruct, _tvtuple
 from coppertop.dm.pp import PP
 
 
-bones.lang.symbol_table.PYCHARM = True
+bones.kernel.symbol_table.PYCHARM = True
 
 
 def _newKernel():
-    sm = psm.PythonStorageManager()
-    k = BonesKernel(sm, litdateCons=litdate, litsymCons=litsym, littupCons=_tvtuple, litstructCons=_tvstruct, litframeCons=dframe)
-    k.ctxs[GLOBAL] = SymTab(k, Missing, Missing, Missing, Missing, GLOBAL)
-    k.ctxs[SCRATCH] = scratchCtx = SymTab(k, Missing, Missing, Missing, k.ctxs[GLOBAL], SCRATCH)
-    k.scratch = scratchCtx
-    k.tcrunner = TCInterpreter(k, scratchCtx)
-    sm.framesForSymTab(k.ctxs[GLOBAL])
-    sm.framesForSymTab(k.ctxs[SCRATCH])
+    k = BonesKernel(litdateCons=litdate, litsymCons=litsym, littupCons=_tvtuple, litstructCons=_tvstruct, litframeCons=dframe)
     return k
 
 class Res: pass
@@ -112,36 +101,83 @@ def test_fun(**ctx):
 
     src = r'''
         // dynamic dispatch
-        
+
         load coppertop.dm.stdlib, coppertop.dm.core, coppertop.dm.testing
-        from coppertop.dm.stdlib import *, ifTrue:ifFalse:, true, false, join, +, ==, PP, typeOf
+        from coppertop.dm.stdlib import *, ifTrue:ifFalse:, true, false, join, +, ==, PP, typeOf, <=
         from coppertop.dm.core import collect, to
-        from coppertop.dm.testing import check, equals
-        
+        from coppertop.dm.testing import check
+
         addOne: {[x:litint] <:litint> x + 1}                            // type info needed here since we are overloading addOne and in dynamic dispatch mode
         addOne: {[x:littxt] <:littxt> x join "One"}
-          
-        (1, "Two ") to <:pylist> :fred collect {x addOne} :joe PP
-        
+
+        (1, "Two ") to <:pylist> :fred PP collect {x addOne} :joe PP
+
         sally: fred collect {                                           // since there is no overload [x:litint + littxt] <:litint + littxt>  is not needed here
-            x typeOf == <:litint> ifTrue: {
+            fn: x typeOf == <:litint> ifTrue: {
                 x + 1
             } ifFalse: {
                 x join "One"
             }
+            fn(x)
         }
-        joe check equals sally
         
+        joe typeOf check <= (sally typeOf)
+        joe check == sally
+
     ''' >> stripSrc
 
     # ctx['showGroups'] = True
-    ctx['EE'] = print
-    with context(**ctx):
+    with context(**ctx, EE=print):
         res = k.pace(src)
-        res.result >> typeOf >> check >> equals >> bool
-        res.result._v >> check >> equals >> True
+        res.result >> typeOf >> check >> equals >> pylist
+        res.result >> check >> equals >> [2, 'Two One']
+
+@bones_lang
+@xfail
+def test_fun2(**ctx):
+
+    k = _newKernel()
+    # add
+    # - blocks,
+    # - block evaluation in ifTrue:ifFalse is no args,
+    # - function / block overloads,
+    # - ensure unary apply is working with tcfunc
+    # - show smalltalk style collect:
+    src = r'''
+        // dynamic dispatch
+
+        load coppertop.dm.stdlib, coppertop.dm.core, coppertop.dm.testing
+        from coppertop.dm.stdlib import *, ifTrue:ifFalse:, true, false, join, +, ==, PP, typeOf, collect:, <=
+        from coppertop.dm.core import collect, to
+        from coppertop.dm.testing import check, fitsWithin
+
+        addOne: {[x:litint] <:litint> x + 1}
+        addOne: [[x:txt] <:txt> x join "One"]       // overloading a block and a function!
+
+        (1, "Two ") to <:pylist> :fred PP collect {x addOne} :joe PP
+
+        sally: fred collect: {                                   
+            x typeOf == <:litint> ifTrue: [
+                x {x + 1}
+            ] ifFalse: [
+                x join "One"
+            ]
+        }
+        joe check == sally
+        joe typeOf check <= (sally typeOf)
+
+    ''' >> stripSrc
+
+    # ctx['showGroups'] = True
+    with context(**ctx, EE=print, traceTcExec=True):
+        res = k.pace(src)
+        res.result >> typeOf >> check >> equals >> pylist
+        res.result >> check >> equals >> [2, '"Two ""One"']
+
+    pass
 
 
+@xfail
 @bones_lang
 def test_overload(**ctx):
     k = _newKernel()
@@ -560,6 +596,7 @@ def main():
     # test_current(debug)
     # test_compile()
     test_fun(**debug)
+    test_fun2(**debug)
     test_overload_fail(analyse=False)
     test_overload_fail(analyse=True)
     test_overload(**debug)

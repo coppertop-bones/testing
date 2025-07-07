@@ -7,31 +7,43 @@
 # License. See the NOTICE file distributed with this work for additional information regarding copyright ownership.
 # **********************************************************************************************************************
 
+import itertools, time, pytest
 
-from coppertop.pipe import *
-from coppertop.dm.pp import PP
+def partitions(cards, handSizes):
+    slices = []
+    s1 = 0
+    for handSize in handSizes:
+        s2 = s1 + handSize
+        slices.append((s1, s2))
+        s1 = s2
+    perms = filter(
+        lambda perm: groupsInOrder(perm, slices),
+        itertools.permutations(cards, len(cards))
+    )
+    return tuple(perms)
 
-from coppertop._testing_ import take2
-take2._take >> typeOf >> PP
+def groupsInOrder(xs, slices):
+    for s1, s2 in slices:
+        if not isAsc(xs[s1:s2]): return False
+    return True
 
-from coppertop._testing_ import take1
-take1._take >> typeOf >> PP
+def isAsc(xs):
+    p = xs[0]
+    for n in xs[1:]:
+        if n <= p: return False
+        p = n
+    return True
 
-from coppertop._testing_.take1 import _take as fred    # pylist*T ^ pylist
-fred >> typeOf >> PP
+@pytest.mark.skip
+def test():
+    t1 = time.perf_counter_ns()
+    for i in range(1):
+        x = partitions(list(range(13)), [5, 4, 4])
+        assert len(x) == 90090
+    t2 = time.perf_counter_ns()
+    print(f'{__file__} took {(t2 - t1) / 1_000_000} ms')
 
-from coppertop._testing_.take2 import _take as joe    # pylist*T ^ pylist
-joe >> typeOf >> PP
 
-from coppertop._testing_.take1 import _take as sally    # pydict*T ^ pydict
-sally >> typeOf >> PP
-
-from coppertop._testing_.take2 import _take as sally    # pydict*T ^ pydict
-sally >> typeOf >> PP
-
-from coppertop._testing_.take1 import _take
-_take >> typeOf >> PP
-
-from coppertop._testing_.take2 import _take     # pydict*T ^ pydict
-_take >> typeOf >> PP
-
+if __name__ == '__main__':
+    test()
+    print('passed')

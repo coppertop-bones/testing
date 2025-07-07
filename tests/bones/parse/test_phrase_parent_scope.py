@@ -8,6 +8,7 @@
 # **********************************************************************************************************************
 
 import pytest
+
 bones_lang = pytest.mark.bones_lang
 xfail = pytest.mark.xfail
 
@@ -15,7 +16,6 @@ from coppertop.pipe import *
 from bones.core.sentinels import Missing
 from bones.kernel.symbol_table import SymbolTable
 import bones.kernel.symbol_table
-# from bones.lang.infer import InferenceLogger
 
 from bones.lang._testing_.utils import stripSrc, pace, evalPyInComments, errorMsg, pace_, newKernel
 from coppertop.dm.testing import check
@@ -23,7 +23,8 @@ from coppertop.dm.core import startsWith, drop
 # from coppertop.dm.core import equals
 
 import coppertop.dm.pp, coppertop.dm.testing
-from coppertop.dm.core.types import litint, littxt, void, litnum, num, index, txt, T1, T2, T3, T4, T5, bool, count, pylist
+from coppertop.dm.core.types import litint, littxt, void, litnum, num, index, txt, T1, T2, T3, T4, T5, bool, count, \
+    pylist
 
 bones.kernel.symbol_table.PYCHARM = True
 
@@ -38,12 +39,12 @@ def test_ex_partitions(**ctx):
         from coppertop.dm.core import sum, count, isEmpty, first, collect, joinAll, prependTo, to, takeDrop, join, equals
         from coppertop.dm.core.bones2 import ifTrue:
         from coppertop.dm.testing import check
-        
+
         partitions: {{[xs, sizes]
             sizes sum check equals (xs count)
             xs _partitions(, xs count, sizes)
         }}
-        
+
         _partitions: {[xs, n, sizes]
             sizes isEmpty ifTrue: [^ (())]
             xs _combRest(, n, sizes first) collect {[a, b]
@@ -52,7 +53,7 @@ def test_ex_partitions(**ctx):
                 }
             } joinAll
         }
-        
+
         _combRest: {[xs, n, m]
             m == 0 ifTrue: [^ ( ((), xs) ) to <:N**T1>]
             m == n ifTrue: [^ ( (xs, ()) ) to <:N**T1>]
@@ -65,27 +66,24 @@ def test_ex_partitions(**ctx):
 
     if context.analyse:
         context.testcase = 'overload fail - static'
-        res = src >> withCtx >> ctx >> pace(k,_) >> evalPyInComments
+        res = src >> withCtx >> ctx >> pace(k, _) >> evalPyInComments
         res \
-            >> check >> errorMsg >> startsWith >> 'cannot constrain {littxt} <:' \
-            >> check >> (lambda x: [e[1] for e in x.types]) >> drop >> 2 >> equals >> res.commentTypes
+        >> check >> errorMsg >> startsWith >> 'cannot constrain {littxt} <:' \
+        >> check >> (lambda x: [e[1] for e in x.types]) >> drop >> 2 >> equals >> res.commentTypes
     else:
         context.testcase = 'run partitions'
-        src >> pace(k, _, None)
+        src >> pace(k, _)
         src >> withCtx >> ctx >> check >> pace_(k, _)
-        #>> raises >> TypeError
-
-
+        # >> raises >> TypeError
 
 
 def main():
+    debug = dict(showSrc=True, showGroups=False, showTc=True, RESTRICT_NOTES=False,
+                 ALL=False)  # , tt=InferenceLogger())
+    debugNoRun = dict(showSrc=True, showGroups=False, showTc=True, RESTRICT_NOTES=False, ALL=False,
+                      run=False)  # , tt=InferenceLogger())
 
-    debug = dict(showSrc=True, showGroups=False, showTc=True, RESTRICT_NOTES=False, ALL=False)#, tt=InferenceLogger())
-    debugNoRun = dict(showSrc=True, showGroups=False, showTc=True, RESTRICT_NOTES=False, ALL=False, run=False)#, tt=InferenceLogger())
-
-    test_ex_partitions()
-
-
+    test_partitionExample()
 
 
 if __name__ == '__main__':

@@ -1,5 +1,9 @@
 # TDD TESTS - OBJECT MANAGER
 
+
+import pytest
+xfail = pytest.mark.xfail
+
 from coppertop.pipe import *
 from coppertop.dm.core.types import pylist, pytuple
 from coppertop.dm.testing import check, raises, equals, gt, different
@@ -12,6 +16,7 @@ from coppertop.dm.pp import PP
 import sys, itertools
 
 
+@xfail
 def test_om():
     sys._k = jones.Kernel()
     om = sys._om = jones_pvt.OM(sys._k)

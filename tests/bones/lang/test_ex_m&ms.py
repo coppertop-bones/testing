@@ -14,14 +14,13 @@ skip = pytest.mark.skip
 
 
 from coppertop.pipe import *
-from bones.lang.core import GLOBAL
-from bones.lang.symbol_table import SymTab
-import bones.lang.symbol_table
+from bones.kernel.symbol_table import SymbolTable
+import bones.kernel.symbol_table
 from bones.lang._testing_.utils import stripSrc, pace as _pace, newKernel
 from bones.ts.metatypes import BType
 
 
-bones.lang.symbol_table.PYCHARM = True
+bones.kernel.symbol_table.PYCHARM = True
 
 
 @bones_lang

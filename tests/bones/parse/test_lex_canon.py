@@ -7,31 +7,27 @@
 # License. See the NOTICE file distributed with this work for additional information regarding copyright ownership.
 # **********************************************************************************************************************
 
-
-from coppertop.pipe import *
+from glob import glob
+import os
+from bones.kernel import lex
 from coppertop.dm.pp import PP
 
-from coppertop._testing_ import take2
-take2._take >> typeOf >> PP
 
-from coppertop._testing_ import take1
-take1._take >> typeOf >> PP
+def test_lex_canon():
+    # home = os.path.expanduser('~/arwen/bones/canon')
+    home = os.path.abspath(os.path.join(lex.__file__, '../../../../canon'))
+    pfns = glob('**/*.b', root_dir=home, recursive=True)
+    assert pfns, f"didn't find bones files in tour path {home}"
+    for pfn in pfns:
+        os.path.join('bones/canon', pfn) >> PP
+        with open(os.path.join(home, pfn)) as f:
+            tokens, lines = lex.lexBonesSrc(0, f.read())
 
-from coppertop._testing_.take1 import _take as fred    # pylist*T ^ pylist
-fred >> typeOf >> PP
 
-from coppertop._testing_.take2 import _take as joe    # pylist*T ^ pylist
-joe >> typeOf >> PP
+def main():
+    test_lex_canon()
 
-from coppertop._testing_.take1 import _take as sally    # pydict*T ^ pydict
-sally >> typeOf >> PP
 
-from coppertop._testing_.take2 import _take as sally    # pydict*T ^ pydict
-sally >> typeOf >> PP
-
-from coppertop._testing_.take1 import _take
-_take >> typeOf >> PP
-
-from coppertop._testing_.take2 import _take     # pydict*T ^ pydict
-_take >> typeOf >> PP
-
+if __name__ == '__main__':
+    main()
+    print('pass')

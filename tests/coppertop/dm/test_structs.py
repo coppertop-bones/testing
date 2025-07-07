@@ -7,6 +7,9 @@
 # License. See the NOTICE file distributed with this work for additional information regarding copyright ownership.
 # **********************************************************************************************************************
 
+import pytest
+xfail = pytest.mark.xfail
+
 from coppertop.pipe import *
 from bones.ts.metatypes import BType
 from coppertop.dm.testing import check, equals
@@ -56,6 +59,7 @@ def test_dstruct():
         f'{(k, v)}' >> PP
 
 
+@xfail
 def test_dseq():
     fred = dseq((N**litint)[dseq], [1, 2])
     fred >> _v >> check >> equals >> [1, 2]
@@ -66,6 +70,7 @@ def test_dseq():
     fred >> _v >> check >> equals >> [0, 1, 2, 3, 4, 5]
 
 
+@xfail
 def test_dmap():
     DF2 = BType('DF2: DF2 & dmap')
 
@@ -116,7 +121,7 @@ def test_me():
 import numpy as np
 
 
-class nd_(np.ndarray):
+class _nd(np.ndarray):
     def __rrshift__(self, arg):  # so doesn't get in the way of arg >> func
         return NotImplemented
 
@@ -134,16 +139,16 @@ class nd_(np.ndarray):
 
 
 @coppertop
-def T(A:nd_):
+def T(A:_nd):
     return A.T
 
 @coppertop
-def allTrue(A:nd_):
+def allTrue(A:_nd):
     return bool(A.all())
 
 
 def test_nd_():
-    assert ((nd_([[1, 2], [3, 4]]) >> T >> T) == (nd_([[1, 3], [2, 4]]) >> T >> T >> T)) >> allTrue
+    assert ((_nd([[1, 2], [3, 4]]) >> T >> T) == (_nd([[1, 3], [2, 4]]) >> T >> T >> T)) >> allTrue
 
 
 

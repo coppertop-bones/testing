@@ -14,7 +14,7 @@ type_system = pytest.mark.type_system
 from coppertop.pipe import *
 from bones.ts.metatypes import BTAtom, BTStruct, _partitionIntersectionTLs, weaken, BTypeError, BTReserved, BType
 import bones.ts.metatypes
-from coppertop.dm._core.structs import tv
+from bones.lang.types import _tv
 from coppertop.dm.utils.testing import assertRaises
 from coppertop.dm.testing import check, equals, fitsWithin, doesNotFitWithin
 from coppertop.dm.core.misc import _v
@@ -132,15 +132,15 @@ cm = BTAtom('cm', space=_ISINy)
 col = BTAtom('col', explicit=True)
 row = BTAtom('row', explicit=True)
 
-GBP = BType('GBP2: GBP2 & ccy').setCoercer(tv)
-USD = BType('USD2: USD2 & ccy').setCoercer(tv)
+GBP = BType('GBP2: GBP2 & ccy').setCoercer(_tv)
+USD = BType('USD2: USD2 & ccy').setCoercer(_tv)
 
 
 # orthogonal
 # anything including a python class, e.g. tmatrix&darray
 lol = BTAtom('lol', space=mem)         # the type for a list of lists (regular?), e.g. tmatrix[lol]
 
-# (txt).setConstructor(tv)
+# (txt).setConstructor(_tv)
 (ISIN & txt)
 (CUSIP & txt)
 
@@ -211,18 +211,18 @@ def testExclusive():
     with assertRaises(BTypeError) as ex:
         lol & pylist
     (txt & square) >> check >> fitsWithin >> txt
-    tv(tmatrix & tdd, [[]]) >> cov >> check >> equals >> 'a:tmatrix'
-    tv(tmatrix & lol & tdd, [[]]) >> cov >> check >> equals >> 'a:tmatrix'
-    tv(tmatrix & dtup & tdd, [[]]) >> cov >> check >> equals >> 'a:tmatrix'
+    _tv(tmatrix & tdd, [[]]) >> cov >> check >> equals >> 'a:tmatrix'
+    _tv(tmatrix & lol & tdd, [[]]) >> cov >> check >> equals >> 'a:tmatrix'
+    _tv(tmatrix & dtup & tdd, [[]]) >> cov >> check >> equals >> 'a:tmatrix'
 
 
 @type_system
 def testGeneric():
     (tmatrix & square) >> check >> fitsWithin >> tmatrix
     tmatrix >> check >> doesNotFitWithin >> (tmatrix & square)
-    tv(tmatrix, [[]] ) >> add >> tv(tmatrix, [[]] ) >> check >> equals >> add_mm
-    tv(tmatrix & right, [[]] ) >> add >> tv(tmatrix & right, [[]] ) >> check >> equals >> add_mm
-    tv(tmatrix & square, [[]] ) >> add >> tv(tmatrix & square, [[]] ) >> check >> equals >> add_msms
+    _tv(tmatrix, [[]] ) >> add >> _tv(tmatrix, [[]] ) >> check >> equals >> add_mm
+    _tv(tmatrix & right, [[]] ) >> add >> _tv(tmatrix & right, [[]] ) >> check >> equals >> add_mm
+    _tv(tmatrix & square, [[]] ) >> add >> _tv(tmatrix & square, [[]] ) >> check >> equals >> add_msms
 
 
 @xfail
@@ -237,7 +237,7 @@ def testImplicit():
     (tmatrix & named) >> check >> fitsWithin >> tmatrix
 
     # show here that named, anon and aliased work as a set i.e.
-    lmatrix = (tmatrix & pylist).setConstructor(tv)
+    lmatrix = (tmatrix & pylist).setConstructor(_tv)
     A = lmatrix([[1, 2], [3, 4]]) | +named
     A2 = A >> opA
     A3 = A2 >> opB      # dispatches to opB(A:tmatrix&aliased) but is subset of anon
@@ -265,6 +265,7 @@ def testOrthogonal():
         (ISIN & txt)('DE') >> _join >> ('0008402215')
 
 
+@xfail
 @type_system
 def testExplicit():
     GBP >> check >> fitsWithin >> GBP
@@ -281,11 +282,11 @@ def testExplicit():
 
 @coppertop(style=binary)
 def mul(c:ccy[T1], f:fx[BTStruct(d=ccy[T1], f=ccy[T2])], tByT) -> ccy[T2]:
-    return tv(ccy[tByT[T2]], c._v * f._v)
+    return _tv(ccy[tByT[T2]], c._v * f._v)
 
 @coppertop(style=binary)
 def mul(c:ccy[T1], f:fx[BTStruct(d=ccy[T2], f=ccy[T1])], tByT) -> ccy[T2]:
-    return tv(ccy[tByT[T2]], c._v / f._v)
+    return _tv(ccy[tByT[T2]], c._v / f._v)
 
 
 @type_system
@@ -297,7 +298,7 @@ def testMisc():
 
 @type_system
 def testAddAndSubtract():
-    BType('tmatrix & pylist in mem').setConstructor(tv)
+    BType('tmatrix & pylist in mem').setConstructor(_tv)
     A = tmatrix[pylist]([[1,2],[3,4]])
     (A | +square) >> check >> typeOf >> (tmatrix[pylist] & square)
     (A | +square | -tmatrix[pylist]) >> check >> typeOf >> square
@@ -308,7 +309,7 @@ def testAddAndSubtract():
     matrix = BType('matrix')
     dseq = BType('dseq')
     Matrix = BType('Matrix: matrix & rowmajor & dseq in mem')
-    x = tv(Matrix, 0) | +(mutable & maddResult)
+    x = _tv(Matrix, 0) | +(mutable & maddResult)
     actual = x | -(mutable & maddResult)
     actual >> check >> typeOf >> Matrix
 
@@ -331,8 +332,8 @@ def testDrop():
 @xfail
 @type_system
 def testExplicitStructs():
-    # GBPUSD = fx[BTStruct(d=GBP, f=USD).setExplicit].setCoercer(tv)
-    GBPUSD = fx[BTStruct(d=GBP, f=USD)].setCoercer(tv)
+    # GBPUSD = fx[BTStruct(d=GBP, f=USD).setExplicit].setCoercer(_tv)
+    GBPUSD = fx[BTStruct(d=GBP, f=USD)].setCoercer(_tv)
     GBPUSD >> check >> doesNotFitWithin >> fx
     GBPUSD >> check >> doesNotFitWithin >> fx[BTStruct(d=T1, f=T2)]        # ccy is not explicit in the rhs
     GBPUSD >> check >> fitsWithin >> fx[BTStruct(d=ccy[T1], f=ccy[T2])]

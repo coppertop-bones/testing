@@ -8,33 +8,22 @@
 # **********************************************************************************************************************
 
 from coppertop.pipe import *
-from bones.kernel import psm
-from bones.kernel.bones import BonesKernel
-from bones.lang.core import GLOBAL, SCRATCH
-from bones.lang.symbol_table import SymTab
-from bones.lang.lex import LINE_COMMENT
-from bones.lang.execute import TCInterpreter
+from bones.kernel.core import BonesKernel
+from bones.kernel.lex import LINE_COMMENT
 from bones.lang.types import litsym, litdate
 from coppertop.dm.testing import check, equals, raises, same
 from coppertop.dm.pp import PP, TT, DD, HH
 from coppertop.dm.core.types import txt, dframe
 from coppertop.dm.core.structs import _tvstruct, _tvtuple
-from bones.lang import lex
-from bones.core.errors import GroupError
-from bones.lang.parse_groups import parseStructure, TUPLE_NULL, TUPLE_OR_PAREN, TUPLE_2D, TUPLE_0_EMPTY, TUPLE_1_EMPTY, \
-    TUPLE_2_EMPTY, TUPLE_3_EMPTY, TUPLE_4_PLUS_EMPTY, SnippetGp
+from bones.kernel import lex
+from bones.kernel.errors import BonesGroupingError
+from bones.kernel.parse_groups import parseStructure, TUPLE_NULL, TUPLE_OR_PAREN, TUPLE_2D, TUPLE_0_EMPTY, TUPLE_1_EMPTY, \
+    TUPLE_2_EMPTY, TUPLE_3_EMPTY, TUPLE_4_PLUS_EMPTY, SnippetGrp
 from bones.core.sentinels import function, Missing
 
 
 def newKernel():
-    sm = psm.PythonStorageManager()
-    k = BonesKernel(sm, litdateCons=litdate, litsymCons=litsym, littupCons=_tvtuple, litstructCons=_tvstruct, litframeCons=dframe)
-    k.ctxs[GLOBAL] = SymTab(k, Missing, Missing, Missing, Missing, GLOBAL)
-    k.ctxs[SCRATCH] = scratchCtx = SymTab(k, Missing, Missing, Missing, k.ctxs[GLOBAL], SCRATCH)
-    k.scratch = scratchCtx
-    k.tcrunner = TCInterpreter(k, scratchCtx)
-    sm.framesForSymTab(k.ctxs[GLOBAL])
-    sm.framesForSymTab(k.ctxs[SCRATCH])
+    k = BonesKernel(litdateCons=litdate, litsymCons=litsym, littupCons=_tvtuple, litstructCons=_tvstruct, litframeCons=dframe)
     return k
 
 @coppertop
@@ -84,7 +73,7 @@ def group_(src:txt, k) -> function:
     return lambda : src >> group(_, k)
 
 @coppertop
-def bb(g:SnippetGp) -> txt:
+def bb(g:SnippetGrp) -> txt:
     return g.PPGroup
 
 @coppertop

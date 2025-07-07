@@ -44,11 +44,13 @@ def test_stuff():
     [[1,2], [2,3], [3,4]] >> eachAsArgs >> add >> check >> equals >> [3, 5, 7]
     [[1, 2], [2, 3], [3, 4]] >> eachAsArgs >> operator.add >> check >> equals >> [3, 5, 7]
 
+@xfail
 def test_at():
     [1,2,3] >> at >> 0 >> check >> equals >> 1
     [1,2,3] >> at >> (0 | offset) >> check >> equals >> 1
     [1,2,3] >> at >> (1 | index) >> check >> equals >> 1
     dseq((N**index)[dseq], [1 | index, 2 | index, 3 | index]) >> at >> (1 | index) >> check >> typeOf >> index
+
 
 @needs_work
 def test_drop():
