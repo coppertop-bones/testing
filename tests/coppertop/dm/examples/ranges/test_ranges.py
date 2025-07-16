@@ -9,9 +9,9 @@ skip = pytest.mark.skip
 
 
 from coppertop.dm.testing import check, equals
-from coppertop.dm.core import to
-from coppertop.dm.examples.ranges.agents import IndexableFR, ListOR, ChainFR
-from coppertop.dm.examples.ranges.utils import rMap, rMaterialise, rTake
+from coppertop.dm.core import to, getAttr
+from coppertop.dm.examples.ranges.nodes import SeqAdaptor, ListSink, Chain
+from coppertop.dm.examples.ranges.utils import rMap, rTake, rExhaustInto, rTarget
 from coppertop.dm.examples.ranges.ex_count_lines_jsp import countLinesJsp, countLinesTrad, countLinesRanges1, \
     countLinesRanges2, countLinesRanges3, home, filename, expected
 from coppertop.dm.examples.ranges.ex_format_calendar import test_allDaysInYear, test_datesBetween, \
@@ -21,32 +21,33 @@ from coppertop.dm.examples.ranges.ex_lazy_vs_eager import test_datesBetween_lazy
 
 
 def test_listRanges():
-    r = IndexableFR([1,2,3])
-    o = ListOR([])
+    seq = [1,2,3]
+    r = SeqAdaptor(seq)
+    o = ListSink([])
     while not r.empty:
         o.put(r.front)
         r.popFront()
-    r.indexable >> check >> equals >> o.list
+    seq >> check >> equals >> o.list
 
 def test_rangeOrRanges():
-    rOfR = [] >> to >> ChainFR
+    rOfR = [] >> to >> Chain
     [e for e in rOfR] >> check >> equals >> []
-    rOfR = (IndexableFR([]), IndexableFR([])) >> to >> ChainFR
+    rOfR = (SeqAdaptor([]), SeqAdaptor([])) >> to >> Chain
     [e for e in rOfR] >> check >> equals >> []
-    rOfR = (IndexableFR([1]), IndexableFR([2])) >> to >> ChainFR
+    rOfR = (SeqAdaptor([1]), SeqAdaptor([2])) >> to >> Chain
     [e for e in rOfR] >> check >> equals >> [1,2]
 
 def test_other():
-    [1, 2, 3] >> rMap >> (lambda x: x) >> rMaterialise >> check >> equals >> [1, 2, 3]
+    [1, 2, 3] >> rMap >> (lambda x: x) >> rExhaustInto >> ListSink() >> rTarget >> check >> equals >> [1, 2, 3]
 
 @skip
 def test_take():
-    r1 = IndexableFR([1,2,3])
+    r1 = SeqAdaptor([1,2,3])
     r2 = r1 >> rTake >> 3
     r1 >> rFront >> check >> equals >> 1
     r3 = r1 >> rTake >> 4
-    r2 >> rMaterialise >> check >> equals >> [1,2,3]
-    r3 >> rMaterialise >> check >> equals >> [2,3]
+    r2 >> rExhaustInto >> ListSink() >> rTarget >> check >> equals >> [1,2,3]
+    r3 >> rExhaustInto >> ListSink() >> rTarget >> check >> equals >> [2,3]
 
 def test_jsp():
     with open(home + filename) as f:
