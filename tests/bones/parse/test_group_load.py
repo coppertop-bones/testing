@@ -16,52 +16,52 @@ def test_group_load():
     group = oldgroup(_, k)
     group_ = oldgroup_(_, k)
 
-    context.testcase = 'load'
-    '''
-    load 
-        dm.core
-    ''' >> group >> bb >> check >> equals >> '{L}'
-    
-    
-    context.testcase = 'load #2'
-    '''
-        load a
-        load a
-        5
-    ''' >> group >> bb >> check >> equals >> '{L}. {L}. l'
-    
-    
-    context.testcase = 'load #3'
-    '''
-        load a, fred.sally,
-          joe,
-          arthur. load stuff,
-                      nancy,
-                    sid
-        load a, b. load c, d.e
-        5
-    ''' >> group >> bb >> check >> equals >> '{L}. {L}. {L}. {L}. l'
-    
-    
-    context.testcase = 'missing name'
-    '''
-    load
-        dm.core,
-    fred
-    ''' >> group_ >> check >> raises >> BonesGroupingError
-    
-    
-    context.testcase = 'nothing specified to load in the phrase'
-    'load' >> group_ >> check >> raises >> BonesGroupingError
-    
-    
-    context.testcase = 'trailing comma causes the error in load #1'
-    '''
-        load 
-            dm.core,        // the trailing comma causes the error
-    ''' >> group_ >> check >> raises >> BonesGroupingError
-    
-    
+    # context.testcase = 'load'
+    # '''
+    # load
+    #     dm.core
+    # ''' >> group >> bb >> check >> equals >> '{L}'
+    #
+    #
+    # context.testcase = 'load #2'
+    # '''
+    #     load a
+    #     load a
+    #     5
+    # ''' >> group >> bb >> check >> equals >> '{L}. {L}. l'
+    #
+    #
+    # context.testcase = 'load #3'
+    # '''
+    #     load a, fred.sally,
+    #       joe,
+    #       arthur. load stuff,
+    #                   nancy,
+    #                 sid
+    #     load a, b. load c, d.e
+    #     5
+    # ''' >> group >> bb >> check >> equals >> '{L}. {L}. {L}. {L}. l'
+    #
+    #
+    # context.testcase = 'missing name'
+    # '''
+    # load
+    #     dm.core,
+    # fred
+    # ''' >> group_ >> check >> raises >> BonesGroupingError
+    #
+    #
+    # context.testcase = 'nothing specified to load in the phrase'
+    # 'load' >> group_ >> check >> raises >> BonesGroupingError
+    #
+    #
+    # context.testcase = 'trailing comma causes the error in load #1'
+    # '''
+    #     load
+    #         dm.core,        // the trailing comma causes the error
+    # ''' >> group_ >> check >> raises >> BonesGroupingError
+
+
     context.testcase = 'load #4'
     '''
         from x import y
@@ -71,9 +71,6 @@ def test_group_load():
     
     context.testcase = 'trailing comma causes the error in load #2'
     '''
-        load 
-            my_first_bones.conversions, 
-            constants             // constants added to stretch the load parsing
         from my_first_bones.lang import ...       // defines op+, op-, op*, op/, tNum, tStr, fUnary, fBinary in global scope
         from std_bones.bones.stdio import stdout :cout, cerr: stderr
         stdout << "Hello " "world!"
@@ -82,4 +79,4 @@ def test_group_load():
         stdout << c
 
         stderr << (1.0 :fred / constants.zero)          // what are we going to do about this?
-    ''' >> group >> bb >> check >> equals >> '{L}. {FI}. {FI}. n n l l. l {:a}. l {:b} n n n {:c}. n n n. n n (l {:fred} n n)'
+    ''' >> group >> bb >> check >> equals >> '{FI}. {FI}. n n l l. l {:a}. l {:b} n n n {:c}. n n n. n n (l {:fred} n n)'

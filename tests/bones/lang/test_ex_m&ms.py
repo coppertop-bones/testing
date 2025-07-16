@@ -29,7 +29,6 @@ def test_MAndMs(**ctx):
     pace = _pace(k, _, _)
 
     src = r'''
-        load coppertop.dm.stdlib, coppertop.dm.pmf
         from coppertop.dm.stdlib import *
         from coppertop.dm.pmf import to, PMF, L, normalise, PP, *
         

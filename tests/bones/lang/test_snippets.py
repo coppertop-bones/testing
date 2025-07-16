@@ -77,7 +77,6 @@ def test_overload_fail(**ctx):
     k = _newKernel()
 
     src = r'''
-        load bones.tstlib.core
         from bones.tstlib.core import ifTrue:ifFalse:, true, false, join, +
         b: (true ifTrue: "1.0" ifFalse: 1)      // litint + littxt
         addOne: {x + 1}                         // litint + litnum + num + index + count) ^ (litint + litnum + num + index + count)
@@ -102,7 +101,6 @@ def test_fun(**ctx):
     src = r'''
         // dynamic dispatch
 
-        load coppertop.dm.stdlib, coppertop.dm.core, coppertop.dm.testing
         from coppertop.dm.stdlib import *, ifTrue:ifFalse:, true, false, join, +, ==, PP, typeOf, <=
         from coppertop.dm.core import collect, to
         from coppertop.dm.testing import check
@@ -146,7 +144,6 @@ def test_fun2(**ctx):
     src = r'''
         // dynamic dispatch
 
-        load coppertop.dm.stdlib, coppertop.dm.core, coppertop.dm.testing
         from coppertop.dm.stdlib import *, ifTrue:ifFalse:, true, false, join, +, ==, PP, typeOf, collect:, <=
         from coppertop.dm.core import collect, to
         from coppertop.dm.testing import check, fitsWithin
@@ -183,7 +180,6 @@ def test_overload(**ctx):
     k = _newKernel()
 
     src = r'''
-        load bones.tstlib.core
         from bones.tstlib.core import ifTrue:ifFalse:, true, false, join, +
         b: (true ifTrue: "1.0" ifFalse: 1)      // litint + littxt
         addOne: {x + 1}                         // (litint + litnum + num + index) ^ (litint + litnum + num + index)
@@ -206,7 +202,6 @@ def test_overload(**ctx):
 def test_SO1(**ctx):
     k = _newKernel()
     src = r'''
-        load bones.tstlib.core
         from bones.tstlib.core import ifTrue:ifFalse:, true, false, join, +
         id: {x}                                         // T1 ^ T1
         a: (true ifTrue: id("1.0") ifFalse: id(1))      // litint + littxt
@@ -224,7 +219,6 @@ def test_SO1(**ctx):
 @bones_lang
 def test_SO2(**ctx):
     src = r'''
-        load bones.tstlib.core
         from bones.tstlib.core import ifTrue:ifFalse:, true, false, join, +
         id: {x}                                 // T1 ^ T1
         foo: {x ifTrue: f(y) ifFalse: f(z)}     // (((T1^T2)&(T3^T4)) * bool * T1 * T3) ^ (T2+T4)
@@ -243,7 +237,6 @@ def test_SO2(**ctx):
 @bones_lang
 def test_unionThenOverload(**ctx):
     src = r'''
-        load bones.tstlib.core
         from bones.tstlib.core import ifTrue:ifFalse:, true, false, join, +
         a: (true ifTrue: "1.0" ifFalse: 1)      // litint + littxt
         addTwo: {x + 2}                         // (litint + litnum + num + index) ^ (litint + litnum + num + index)
@@ -263,7 +256,6 @@ def test_unionThenOverload(**ctx):
 @bones_lang
 def test_polymorphic1(**ctx):
     src = r'''
-        load bones.tstlib.core
         from bones.tstlib.core import toTxt, join
         thing: {join(f(x), f(y))}               // (((T1^txt) & (T2^txt)) * T1 * T2) ^ txt
         thing(toTxt, 1, "two")                  // txt
@@ -283,7 +275,6 @@ def test_polymorphic1(**ctx):
 @bones_lang
 def test_polymorphic2(**ctx):
     src = r'''
-        load bones.tstlib.core
         from bones.tstlib.core import ifTrue:ifFalse:, true, false, join, +
         id: {x}                             // T1 ^ T1
         addTwo: {{f(x) + 2}}                // ((T1 ^ (litint + litnum + num + index)) * T1) ^ (litint + litnum + num + index)
@@ -304,7 +295,6 @@ def test_polymorphic2(**ctx):
 @bones_lang
 def test_polymorphicInFn(**ctx):
     src = r'''
-        load bones.tstlib.core
         from bones.tstlib.core import ifTrue:ifFalse:, true, false, join, +, isString, addOne
         add: {x+y}                                  // ((litint+litnum+num+index) * (litint+litnum+num+index)) ^ (litint+litnum+num+index)
         id: {x}                                     // T1 ^ T1
@@ -339,7 +329,6 @@ def test_polymorphicInFn(**ctx):
 def test_polymorphicInFn2(**ctx):
     src = r'''
         // https://stackoverflow.com/questions/36587571/confusing-about-haskell-type-inference
-        load bones.tstlib.core
         from bones.tstlib.core import ifTrue:ifFalse:, true, false, join, +
 
         hoo: {x ifTrue: f(y) ifFalse: f(z)}
@@ -367,7 +356,6 @@ def test_polymorphicInFn2(**ctx):
 def test_polymorphicInFn3(**ctx):
     src = r'''
         // https://stackoverflow.com/questions/36587571/confusing-about-haskell-type-inference
-        load bones.tstlib.core
         from bones.tstlib.core import ifTrue:ifFalse:, true, false, join, +
 
         fxAddTwo: {f(x) + 2}

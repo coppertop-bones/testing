@@ -34,7 +34,6 @@ def test_ex_partitions(**ctx):
     k = newKernel()
 
     src = r'''
-        load coppertop.dm.core, coppertop.dm.testing, coppertop.dm.core.bones2
         from coppertop.dm.core import sum, count, isEmpty, first, collect, joinAll, prependTo, to, takeDrop, join, equals
         from coppertop.dm.core.bones2 import ifTrue:
         from coppertop.dm.testing import check

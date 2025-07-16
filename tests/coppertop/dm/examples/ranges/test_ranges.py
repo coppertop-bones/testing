@@ -10,7 +10,7 @@ skip = pytest.mark.skip
 
 from coppertop.dm.testing import check, equals
 from coppertop.dm.core import to
-from coppertop.dm.examples.ranges.agents import IndexableFR, ListOR, ChainAsSingleFR
+from coppertop.dm.examples.ranges.agents import IndexableFR, ListOR, ChainFR
 from coppertop.dm.examples.ranges.utils import rEach, rGetIRIter, rMaterialise
 from coppertop.dm.examples.ranges.ex_count_lines_jsp import countLinesJsp, countLinesTrad, countLinesRanges1, \
     countLinesRanges2, countLinesRanges3, home, filename, expected
@@ -29,11 +29,11 @@ def test_listRanges():
     r.indexable >> check >> equals >> o.list
 
 def test_rangeOrRanges():
-    rOfR = [] >> to >> ChainAsSingleFR
+    rOfR = [] >> to >> ChainFR
     [e for e in rOfR >> rGetIRIter] >> check >> equals >> []
-    rOfR = (IndexableFR([]), IndexableFR([])) >> to >> ChainAsSingleFR
+    rOfR = (IndexableFR([]), IndexableFR([])) >> to >> ChainFR
     [e for e in rOfR >> rGetIRIter] >> check >> equals >> []
-    rOfR = (IndexableFR([1]), IndexableFR([2])) >> to >> ChainAsSingleFR
+    rOfR = (IndexableFR([1]), IndexableFR([2])) >> to >> ChainFR
     [e for e in rOfR >> rGetIRIter] >> check >> equals >> [1,2]
 
 def test_other():
