@@ -35,11 +35,11 @@ def test_dtup():
     fred = dtup(N**(N**index), [[1,2]])
 
     # test inference of type from construction
-    # dtup((1,2,"hello")) >> typeOf >> check >> equals >> litint*litint*littxt
+    # dtup((1,2,'hello')) >> typeOf >> check >> equals >> litint*litint*littxt
 
     # with assertRaises(NotYetImplemented):
     #     # inferring type of more than 2d is ambiguous - should a nested list be a subarray or a pylist?
-    #     dtup(((1, 2), "hello"))
+    #     dtup(((1, 2), 'hello'))
 
 
 

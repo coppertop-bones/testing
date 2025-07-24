@@ -14,10 +14,10 @@ skip = pytest.mark.skip
 
 
 from coppertop.pipe import *
-from bones.kernel.symbol_table import SymbolTable
 import bones.kernel.symbol_table
 from bones.lang._testing_.utils import stripSrc, pace as _pace, newKernel
 from bones.ts.metatypes import BType
+from coppertop.dm.pp import PP
 
 
 bones.kernel.symbol_table.PYCHARM = True

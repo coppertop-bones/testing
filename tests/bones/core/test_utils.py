@@ -17,9 +17,9 @@ from coppertop.dm.utils.testing import assertRaises
 def testStdoutHooker():
     with HookStdOutErrToLines() as outerr:
         lines = outerr[0]
-        print("hello")
+        print('hello')
         assert len(lines) == 1, lines
-        assert lines[0] == "hello", lines
+        assert lines[0] == 'hello', lines
         print()
         print("there", "is", "\n", "another line\nagain")
         print()

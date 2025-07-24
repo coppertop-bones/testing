@@ -78,7 +78,7 @@ def test_redefine():
     1 >> addOneAgain >> check >> equals >> 3
 
 def check_types_of_weak_things():
-    fred(1 | index, "hello", True, (), 1, 1.3, 1.3 | num) >> check >> equals >> "index,txt,bool,pytuple,litint,litnum,num"
+    fred(1 | index, 'hello', True, (), 1, 1.3, 1.3 | num) >> check >> equals >> "index,txt,bool,pytuple,litint,litnum,num"
 
 
 def main():

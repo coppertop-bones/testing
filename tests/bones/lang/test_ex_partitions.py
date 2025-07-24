@@ -13,7 +13,6 @@ xfail = pytest.mark.xfail
 
 from coppertop.pipe import *
 from bones.core.sentinels import Missing
-from bones.kernel.symbol_table import SymbolTable
 import bones.kernel.symbol_table
 # from bones.lang.infer import InferenceLogger
 
