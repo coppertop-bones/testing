@@ -7,7 +7,7 @@
 # License. See the NOTICE file distributed with this work for additional information regarding copyright ownership.
 # **********************************************************************************************************************
 
-from bones.core.errors import ErrSite
+from coppertop.core import ErrSite
 
 
 class Fred:

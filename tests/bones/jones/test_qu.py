@@ -17,7 +17,7 @@ from coppertop.pipe import *
 from coppertop.dm.core.types import pylist, pytuple
 from coppertop.dm.testing import check, raises, equals, gt, different
 from bones import jones
-from bones.core.errors import NotYetImplemented
+from coppertop.core import NotYetImplemented
 from coppertop.dm.pp import PP
 
 

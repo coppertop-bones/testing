@@ -9,7 +9,7 @@ from coppertop.dm.core.types import pylist, pytuple
 from coppertop.dm.testing import check, raises, equals, gt, different
 from bones import jones
 # from bones import jones_pvt
-from bones.core.errors import NotYetImplemented
+from coppertop.core import NotYetImplemented
 import coppertop.dm.pp
 from coppertop.dm.pp import PP
 

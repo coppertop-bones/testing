@@ -11,7 +11,8 @@ import pytest
 xfail = pytest.mark.xfail
 
 from coppertop.pipe import *
-from bones.core.sentinels import Missing
+from coppertop.core import Missing
+
 from coppertop.dm.testing import check, equals
 from coppertop.dm.core.misc import asideDo
 from bones.ts.metatypes import BTStruct

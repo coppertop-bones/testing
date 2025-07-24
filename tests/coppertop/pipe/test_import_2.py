@@ -10,7 +10,6 @@
 
 from coppertop.pipe import *
 from coppertop.dm.testing import check, equals
-from bones.core.test_utils import assertRaises
 from coppertop.dm.core.types import pyint, txt
 
 from coppertop._testing_.add_one_int import addOne

@@ -7,6 +7,7 @@
 # License. See the NOTICE file distributed with this work for additional information regarding copyright ownership.
 # **********************************************************************************************************************
 
+import types
 from coppertop.pipe import *
 from bones.kernel.core import BonesKernel
 from bones.kernel.lex import LINE_COMMENT
@@ -19,7 +20,6 @@ from bones.kernel import lex
 from bones.kernel.errors import BonesGroupingError
 from bones.kernel.parse_groups import parseStructure, TUPLE_NULL, TUPLE_OR_PAREN, TUPLE_2D, TUPLE_0_EMPTY, TUPLE_1_EMPTY, \
     TUPLE_2_EMPTY, TUPLE_3_EMPTY, TUPLE_4_PLUS_EMPTY, SnippetGrp
-from bones.core.sentinels import function, Missing
 
 
 def newKernel():
@@ -69,7 +69,7 @@ def group(src:txt, k):
     return parseStructure(tokens, k.scratch, src)
 
 @coppertop
-def group_(src:txt, k) -> function:
+def group_(src:txt, k) -> types.FunctionType:
     return lambda : src >> group(_, k)
 
 @coppertop

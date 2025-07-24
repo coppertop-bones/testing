@@ -9,9 +9,10 @@
 
 import antlr4, traceback, os
 
+from coppertop.core import context              # needed for conditional break points whilst debugging
+
 from bones.jones import BTypeError
 from coppertop.dm.utils.testing import assertRaises
-from bones.core.context import context              # needed for conditional break points whilst debugging
 
 from bones.ts.core import TLError, bmtatm
 from bones.ts.type_lang import TypeLangInterpreter

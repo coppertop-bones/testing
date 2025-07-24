@@ -14,8 +14,7 @@ xfail = pytest.mark.xfail
 from coppertop.pipe import *
 
 from bones import jones
-from bones.core.sentinels import Missing
-from bones.core.errors import NotYetImplemented
+from coppertop.core import Missing, NotYetImplemented
 
 from coppertop.dm.core.types import pylist, pytuple
 from coppertop.dm.testing import check, raises, equals, gt, different

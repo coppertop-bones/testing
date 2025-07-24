@@ -12,7 +12,7 @@ bones_lang = pytest.mark.bones_lang
 xfail = pytest.mark.xfail
 
 from coppertop.pipe import *
-from bones.core.sentinels import Missing
+from coppertop.core import Missing
 import bones.kernel.symbol_table
 # from bones.lang.infer import InferenceLogger
 

@@ -14,7 +14,7 @@ skip = pytest.mark.skip
 
 
 from coppertop.pipe import *
-from bones.core.sentinels import Missing
+from coppertop.core import Missing
 from bones.kernel.core import BonesKernel
 import bones.kernel.symbol_table
 from bones.kernel.lex import LINE_COMMENT, BREAKOUT
@@ -130,8 +130,8 @@ def test_fun(**ctx):
         res.result >> typeOf >> check >> equals >> pylist
         res.result >> check >> equals >> [2, 'Two One']
 
+
 @bones_lang
-@xfail
 def test_fun2(**ctx):
 
     k = _newKernel()

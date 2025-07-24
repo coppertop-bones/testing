@@ -7,8 +7,7 @@
 # License. See the NOTICE file distributed with this work for additional information regarding copyright ownership.
 # **********************************************************************************************************************
 
-from bones.core.sentinels import Missing
-from bones.core.context import context
+from coppertop.core import Missing, context
 
 
 def test_context():

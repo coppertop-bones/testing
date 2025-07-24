@@ -14,9 +14,7 @@ import pytest
 xfail = pytest.mark.xfail
 
 from coppertop.pipe import *
-from bones.core.errors import NotYetImplemented
 from bones.ts.metatypes import BTAtom
-from coppertop.dm.utils.testing import assertRaises
 from coppertop.dm.testing import check, equals
 from coppertop._testing_.take1 import _take
 from coppertop._testing_.take2 import _take

@@ -8,7 +8,7 @@
 # **********************************************************************************************************************
 
 from coppertop.dm.testing import check, equals
-from bones.core.errors import ErrSite
+from coppertop.core import ErrSite
 from bones.kernel._testing_.fred import Fred
 
 import pytest
