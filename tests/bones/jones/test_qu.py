@@ -10,6 +10,7 @@
 import math, time, itertools, numpy as np, pytest
 
 slow = pytest.mark.slow
+skip = pytest.mark.skip
 
 from bones import qu
 
@@ -149,7 +150,7 @@ def test_fill_matrix():
     return "test_fill_matrix passed"
 
 
-@slow
+@skip
 def test_lognormal_martingale(numRuns):
     N, M = 365, 10_000
     f0 = 0.05

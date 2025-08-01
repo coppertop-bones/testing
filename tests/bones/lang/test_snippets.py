@@ -139,7 +139,7 @@ def test_fun2(**ctx):
     # - blocks,
     # - block evaluation in ifTrue:ifFalse is no args,
     # - function / block overloads,
-    # - ensure unary apply is working with tcfunc
+    # - ensure unary apply is working with cfunc
     # - show smalltalk style collect:
     src = r'''
         // dynamic dispatch
