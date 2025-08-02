@@ -15,8 +15,7 @@ import enum, pytest
 
 from coppertop.pipe import *
 from coppertop.dm.testing import check
-from coppertop.dm.core import sequence, collect, inject, atSlot, atSlotPut, closeTo
-from coppertop.dm.core.comparisons import equals
+from coppertop.dm.core import sequence, collect, inject, atSlot, atSlotPut, closeTo, equals, gt
 from coppertop.dm.core.types import dstruct
 from coppertop.dm.pmf import uniform, rvAdd, mix, toXsPs, PMF, pmfMul, normalise, L, formatPmf, CMF, quantile, at, to
 
@@ -43,6 +42,16 @@ J1 = E.J1
 J2 = E.J2
 
 
+@coppertop
+def powerLawPrior(n, alpha) -> PMF:
+    return sequence(1, 1000) >> collect >> (lambda hyp: (hyp, hyp ** (-alpha))) >> to >> PMF
+
+@coppertop
+def railroadLikelihood(N, ob):
+    return sequence(1, N) \
+        >> collect >> (lambda hyp: (hyp, 0) if hyp < ob else (hyp, 1 / hyp)) \
+        >> to >> L
+
 def test_pmf():
     d4 = sequence(1, 4) >> uniform
     d6 = sequence(1, 6) >> uniform
@@ -63,6 +72,19 @@ def test_cmf():
     d6 = uniform(sequence(1, 6))
     cmf = d6 >> to >> CMF
     cmf >> quantile(_, 0.5) >> check >> equals >> 3
+
+def test_railroad():
+    observations = [30, 60, 90]
+    Ns = [250, 500, 1000, 2000, 4000]
+
+    N = Ns[1]
+    prior = powerLawPrior(N, 0.9)
+    ob = observations[1]
+    like = railroadLikelihood(N, ob)
+    post = prior >> pmfMul >> like >> normalise
+    c = post >> to >> CMF
+    c >> quantile(_,0.05) >> check >> gt >> 61
+
 
 def test_MM():
     bag1994 = dstruct(Brown=30, Yellow=20, Red=20, Green=10, Orange=10, Tan=10)

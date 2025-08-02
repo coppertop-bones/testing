@@ -7,9 +7,6 @@
 # License. See the NOTICE file distributed with this work for additional information regarding copyright ownership.
 # **********************************************************************************************************************
 
-# map, seq are abstract?
-# pydict, pylist, pyset, pytuple are
-
 import numpy as np
 
 from coppertop.pipe import *
@@ -54,28 +51,6 @@ def test_num():
 
     with assertRaises(TypeError):
         np.array([[1, 2]]) >> to >> num
-
-
-
-#
-
-# @coppertop(style=binary)
-# def different(a, b) -> bool:
-#     return not fitsWithin(typeOf(a), typeOf(b)) or a != b
-#
-# @coppertop(style=binary, dispatchEvenIfAllTypes=True)
-# def equals(a, b) -> bool:
-#     return fitsWithin(typeOf(a), typeOf(b)) and a == b
-#
-# @coppertop(style=binary)
-# def join(s1:txt, s2:txt) -> txt:
-#     return s1 + s2
-#
-# @coppertop(style=binary)
-# def join(s1:txt[T1], s2:txt[T1], tByT) -> txt[T1]:
-#     return s1 + s2
-
-
 
 
 
