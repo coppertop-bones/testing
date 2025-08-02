@@ -12,42 +12,23 @@ if hasattr(sys, '_TRACE_IMPORTS') and sys._TRACE_IMPORTS: print(__name__)
 
 import pytest
 skip = pytest.mark.skip
+import numpy as np
 
 from coppertop.pipe import *
-from coppertop.utils import assertRaises
-from coppertop.dm.testing import check #, subClassOf
-from coppertop.dm.core import sequence, collect, inject, atSlot, atSlotPut, closeTo, to
-from coppertop.dm.core.comparisons import equals, different
-from coppertop.dm.core.types import dstruct, pyndarray
-from coppertop.dm.polarframe import polarframe, polarseries, at
+from coppertop.dm.testing import check
+from coppertop.dm.core import mean, std
+from coppertop.dm.core.comparisons import equals, closeTo
+from coppertop.dm.core.types import num
 
 
 
-@skip
-def test_lots():
+def test():
+    np.array([1,2,3,4,5,6]) >> mean >> check >> closeTo >> 3.5
+    np.array([1,2,3,4,5,6]) >> mean >> typeOf >> check >> equals >> num
+    np.array([1,2,3,4,5,6]) >> std >> typeOf >> check >> equals >> num
 
-    f = polarframe(a=[1,2,1,2,1,2], b=[2,2,2,1,1,1], c=['a','b','c','d','e','f'])
-    g = polarframe([
-        {'a':1, 'b':2, 'c':'a'},
-        {'a':2, 'b':2, 'c':'b'},
-        {'a':1, 'b':2, 'c':'c'},
-        {'a':2, 'b':1, 'c':'d'},
-        {'a':1, 'b':1, 'c':'e'},
-        {'a':2, 'b':1, 'c':'f'}
-    ])
-    h = polarframe({
-        'a': [1,2,1,2,1,2],
-        'b': [2,2,2,1,1,1],
-        'c': ['a','b','c','d','e','f']
-    })
-
-    f >> check >> equals >> g
-
-    f >> at >> 'a' >> check >> equals >> polarseries(a=[1, 2, 1, 2, 1, 2])
-    f >> at >> ['a', 'b']  >> check >> equals >> polarframe(a=[1, 2, 1, 2, 1, 2], b=[2, 2, 2, 1, 1, 1])
-    f >> at >> ['a', 'b', 'c'] >> check >> equals >> h
 
 
 if __name__ == '__main__':
-    test_lots()
+    test()
     print('Passed')

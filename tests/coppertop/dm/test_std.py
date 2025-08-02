@@ -55,7 +55,7 @@ def test_at():
 def test_drop():
     # matches drop(T2 & py & (py&self) & (N**T1), count) in dm.core.aggman - dm.core.aggman.drop
     dseq((N**str)[dseq], ['a','b','c']) >> drop >> (2 | count) >> check >> typeOf >> (N**str)[dseq]
-    
+
 
 @xfail
 def test_drop2():
