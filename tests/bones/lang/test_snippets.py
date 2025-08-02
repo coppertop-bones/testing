@@ -14,7 +14,7 @@ skip = pytest.mark.skip
 
 
 from coppertop.pipe import *
-from coppertop.core import Missing
+from coppertop.utils import Missing
 from bones.kernel.core import BonesKernel
 import bones.kernel.symbol_table
 from bones.kernel.lex import LINE_COMMENT, BREAKOUT

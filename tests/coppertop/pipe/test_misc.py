@@ -12,7 +12,8 @@ import sys, builtins
 if hasattr(sys, '_TRACE_IMPORTS') and sys._TRACE_IMPORTS: print(__name__)
 
 from coppertop.pipe import *
-from coppertop.dm.utils.testing import assertRaises
+from coppertop.utils import assertRaises
+
 from coppertop.dm.testing import check, equals
 from coppertop.dm.core import collect, interleave
 from coppertop.dm.pp import PP

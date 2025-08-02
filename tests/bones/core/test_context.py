@@ -7,7 +7,7 @@
 # License. See the NOTICE file distributed with this work for additional information regarding copyright ownership.
 # **********************************************************************************************************************
 
-from coppertop.core import Missing, context
+from coppertop.utils import Missing, context
 
 
 def test_context():

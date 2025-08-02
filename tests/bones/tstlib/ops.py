@@ -14,7 +14,7 @@ if hasattr(sys, '_TRACE_IMPORTS') and sys._TRACE_IMPORTS: print(__name__)
 
 from coppertop.pipe import *
 from coppertop.dm.core.types import litint, litnum, num, count as tCount, err, T, T1, T2
-from coppertop.core import NotYetImplemented
+from coppertop.utils import NotYetImplemented
 
 
 

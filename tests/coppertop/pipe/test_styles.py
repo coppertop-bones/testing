@@ -8,9 +8,9 @@
 # **********************************************************************************************************************
 
 from coppertop.pipe import *
-from coppertop.pipe import CoppertopError
+from coppertop.utils import assertRaises
+
 from coppertop.dm.core.text import startsWith, endsWith
-from coppertop.dm.utils.testing import assertRaises
 from coppertop.dm.testing import check, equals
 from bones import jones
 from coppertop.dm.pp import NB

@@ -8,8 +8,8 @@
 # **********************************************************************************************************************
 
 from coppertop.pipe import *
+from coppertop.utils import assertRaises
 from coppertop.dm.core import to, shape
-from coppertop.dm.utils.testing import assertRaises
 from coppertop.dm.core.types import matrix, darray
 from coppertop.dm.testing import check, equals
 from coppertop.dm.core.conv import to

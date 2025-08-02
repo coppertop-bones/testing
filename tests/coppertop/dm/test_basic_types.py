@@ -10,11 +10,13 @@
 # map, seq are abstract?
 # pydict, pylist, pyset, pytuple are
 
-from coppertop.pipe import *
-from bones.ts.metatypes import BType
-from coppertop.dm.core.types import txt, num, count, index, offset, dmap, dseq
+import numpy as np
 
-from coppertop.dm.core.aggman import join
+from coppertop.pipe import *
+from coppertop.utils import assertRaises
+from bones.ts.metatypes import BType
+from coppertop.dm.core.types import txt, num, count, index, offset, dmap, dseq, pyndarray
+from coppertop.dm.core import join, to
 from coppertop.dm.testing import check, equals, different
 
 
@@ -30,6 +32,31 @@ def test_txt():
 
     x = 'hello' | txt
     y = x | safetxt
+
+
+def test_num():
+    num(2.0) >> typeOf >> check >> equals >> num
+    num(np.array([1])) >> typeOf >> check >> equals >> num
+    num(np.array([[1]])) >> typeOf >> check >> equals >> num
+
+    (2.0 | num) >> typeOf >> check >> equals >> num
+    (np.array([1]) | num) >> typeOf >> check >> equals >> pyndarray
+    (np.array([[1]]) | num) >> typeOf >> check >> equals >> pyndarray
+    (np.array([1]) | num) >> type >> check >> equals >> np.ndarray
+    (np.array([[1]]) | num) >> type >> check >> equals >> np.ndarray
+
+    2 >> to >> num >> typeOf >> check >> equals >> num
+    np.array([1]) >> to >> num >> typeOf >> equals >> num
+    np.array([[1]]) >> to >> num >> typeOf >> check >> equals >> num
+
+    with assertRaises(SyntaxError):
+        num()
+
+    with assertRaises(TypeError):
+        np.array([[1, 2]]) >> to >> num
+
+
+
 #
 
 # @coppertop(style=binary)

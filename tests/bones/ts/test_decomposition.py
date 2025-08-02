@@ -12,10 +12,10 @@ xfail = pytest.mark.xfail
 type_system = pytest.mark.type_system
 
 from coppertop.pipe import *
+from coppertop.utils import assertRaises
 from bones.ts.metatypes import BTAtom, BTStruct, _partitionIntersectionTLs, weaken, BTypeError, BTReserved, BType
 import bones.ts.metatypes
 from bones.lang.types import _tv
-from coppertop.dm.utils.testing import assertRaises
 from coppertop.dm.testing import check, equals, fitsWithin, doesNotFitWithin
 from coppertop.dm.core.misc import _v
 from coppertop.dm.core.conv import to

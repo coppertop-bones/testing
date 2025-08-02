@@ -8,14 +8,13 @@
 # **********************************************************************************************************************
 
 import sys
-# sys._TRACE_IMPORTS = True
 if hasattr(sys, '_TRACE_IMPORTS') and sys._TRACE_IMPORTS: print(__name__)
 
 
 from coppertop.pipe import *
+from coppertop.utils import assertRaises
 from bones.ts.metatypes import BTAtom, BType, BTSeq, BTMap, BTFn, BTStruct, isT
 from coppertop.dm.testing import check, equals
-from coppertop.dm.utils.testing import assertRaises
 from coppertop.dm.core.aggman import collect, joinAll, sortUsing
 from coppertop.dm.core.conv import to
 from coppertop.dm.core.misc import box

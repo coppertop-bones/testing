@@ -52,15 +52,10 @@ def test_at():
     dseq((N**index)[dseq], [1 | index, 2 | index, 3 | index]) >> at >> (1 | index) >> check >> typeOf >> index
 
 
-@needs_work
 def test_drop():
-    # Can't find drop(py & (py&self) & (N**txt), count) in:
-    #   drop(py & (py&self) & (N**T1), py & (py&self) & (N**T2)) in dm.core.aggman - dm.core.aggman.drop
-    #   drop(T2 & py & (py&self) & (N**T1), count) in dm.core.aggman - dm.core.aggman.drop
-    #   drop(py&self + py&self, py&self) in dm.core.aggman - dm.core.aggman.drop
-
-    # this should match - def drop(xs:(N**T1)[dseq][T2], n:t.count, tByT) -> (N**T1)[dseq][T2]: but doesn't
+    # matches drop(T2 & py & (py&self) & (N**T1), count) in dm.core.aggman - dm.core.aggman.drop
     dseq((N**str)[dseq], ['a','b','c']) >> drop >> (2 | count) >> check >> typeOf >> (N**str)[dseq]
+    
 
 @xfail
 def test_drop2():
@@ -71,7 +66,7 @@ def main():
     test_at()
     test_inject()
     test_stuff()
-    # test_drop()
+    test_drop()
 
 
 if __name__ == '__main__':

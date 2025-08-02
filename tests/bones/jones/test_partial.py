@@ -8,7 +8,7 @@
 # **********************************************************************************************************************
 
 from bones import jones
-from coppertop.dm.utils.testing import assertRaises
+from coppertop.utils import assertRaises
 
 # important - in Python even if only one function we have to select in order to type check, so we only need a multi-function and not a dispatcher
 

@@ -13,8 +13,7 @@ import pytest
 xfail = pytest.mark.xfail
 
 from bones import jones
-from coppertop.core import Missing
-from coppertop.dm.utils.testing import assertRaises
+from coppertop.utils import Missing, assertRaises
 
 from bones.jones import BTypeError
 from bones.ts.type_lang import TypeLangInterpreter

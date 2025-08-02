@@ -11,8 +11,8 @@ import sys
 # sys._TRACE_IMPORTS = True
 
 
-from coppertop.core import HookStdOutErrToLines
-from coppertop.dm.utils.testing import assertRaises
+from coppertop._utils.testing import HookStdOutErrToLines
+from coppertop.utils import assertRaises
 
 def testStdoutHooker():
     with HookStdOutErrToLines() as outerr:

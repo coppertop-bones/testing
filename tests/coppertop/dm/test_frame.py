@@ -11,7 +11,7 @@ import pytest
 xfail = pytest.mark.xfail
 
 from coppertop.pipe import *
-from coppertop.core import Missing
+from coppertop.utils import Missing
 
 from coppertop.dm.testing import check, equals
 from coppertop.dm.core.misc import asideDo
