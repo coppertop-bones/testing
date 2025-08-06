@@ -154,11 +154,11 @@ def test_nd_():
 
 
 def main():
+    test_me()
     test_dtup()
     test_dstruct()
     test_dseq()
     test_dmap()
-    test_me()
     test_nd_()
 
 

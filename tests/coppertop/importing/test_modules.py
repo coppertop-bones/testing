@@ -15,7 +15,8 @@ import pytest
 xfail = pytest.mark.xfail
 
 from coppertop.pipe import *
-from coppertop.dm.utils.testing import assertRaises
+from coppertop.utils import assertRaises
+
 from coppertop.dm.testing import check, equals
 from coppertop.dm.core.types import txt, num
 
