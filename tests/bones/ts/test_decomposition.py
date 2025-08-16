@@ -306,9 +306,9 @@ def testAddAndSubtract():
     mutable = BTAtom('mutable')
     maddResult = BTAtom('maddResult')
     rowmajor = BTAtom('rowmajor')
-    matrix = BType('matrix')
+    matrix = BType('matrix2')
     dseq = BType('dseq')
-    Matrix = BType('Matrix: matrix & rowmajor & dseq in mem')
+    Matrix = BType('Matrix: matrix2 & rowmajor & dseq in mem')
     x = _tv(Matrix, 0) | +(mutable & maddResult)
     actual = x | -(mutable & maddResult)
     actual >> check >> typeOf >> Matrix
