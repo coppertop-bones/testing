@@ -11,8 +11,9 @@
 from coppertop.pipe import *
 from coppertop.utils import assertRaises
 from coppertop.dm.testing import check, equals
-from coppertop.dm.core.reporting import display_table, join, to
+from coppertop.dm.core.text_report import display_table, join
 from coppertop.dm.core import matrix
+from coppertop.dm.linalg.core import to
 from coppertop.dm.pp import PP
 
 
