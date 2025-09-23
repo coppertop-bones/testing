@@ -8,22 +8,27 @@
 # **********************************************************************************************************************
 
 import pytest
-xfail = pytest.mark.xfail
 
 from coppertop.pipe import *
+from coppertop.utils import assertRaises, Missing
+
+xfail = pytest.mark.xfail
+
 from bones.ts.metatypes import BType
 from coppertop.dm.testing import check, equals
-from coppertop.dm.core.aggman import append, prepend, prependTo, appendTo, join, drop, at, keys, sort, kvs
+from coppertop.dm.core.aggman import append, prepend, prependTo, appendTo, join, drop, at, keys, sort, kvs, copy
 from coppertop.dm.core.misc import _v, box
 from coppertop.dm.core.conv import to
 from coppertop.dm.pp import PP
+from coppertop.dm.core.structs import _tvtuple, _tvstruct, _tvseq, _tvmap, _tvarray, _tvdate, _tvtime, _tvdatetime
 
-from coppertop.dm.core.types import N, num, index, txt, litint, pydict, pylist, dtup, dstruct, dseq, dmap, dframe, T1, littxt
+from coppertop.dm.core.types import N, num, index, txt, litint, pydict, pylist, dtup, dstruct, dseq, dmap, darray, \
+    dframe, T1, littxt, pyint
 # def to(xs:N**T, t:N**(T)) -> N**(T):
 
 
 
-def test_dtup():
+def test_tuple():
     # inferred type one level and 1D only
     # dtup() >> typeOf >> check >> equals >> null
 
@@ -42,36 +47,89 @@ def test_dtup():
     #     dtup(((1, 2), 'hello'))
 
 
+def test_struct():
+    t2D = BType('{x:num, y:num}')
+    t3D = BType('{x:num, y:num, z:num}')
+
+    # fully typed construction
+    v2 = _tvstruct(t2D, dict(x=1, y=2))
+    assert v2._t == t2D
+
+    # initializing a structure in steps
+    tUninitPoint = BType('{x:num+missing, y:num+missing}')
+    tmp = _tvstruct(t2D)
+    assert tmp._t == tUninitPoint
+    assert tmp.x == Missing
+    tmp.x = 1.0
+    tmp.y = 2.0
+    assert tmp._t == tUninitPoint
+    v1 = tmp | t2D               # can we ever to inplace coercion in Python?
+    assert v1._t == t2D
+
+    # extending a structure (in place)
+    v1.z = 3.0
+    assert v1._t == t3D
+
+    # creating an empty structure
+    tEmpty = BType('{}')
+    tmp2 = _tvstruct()
+    assert tmp2._t == tEmpty
+    tmp2.x = 1.0
+    tmp2.y = 2.0
+    assert tmp2._t == t2D
+    tmp2.z = 3.0
+    assert tmp2._t == t3D
+
+    # using dstruct
+    tPoint2 = t2D & dstruct
+    v3 = tPoint2(dict(x=1,y=2))
+    v4 = tPoint2([1,2])
+    v3.x, v4.x = 2, 2
+    assert v3._v == v4._v
+
+    # check the indexable interface
+    assert v3['x'] == 2
+    v3['x'], v4['x'] = 1, 1
+    assert v3._v == v4._v
+
+    # pvt data
+    v3._fred = 1
+    assert v3._fred == 1
+
+    assert repr(v3) == f'<{v3._t}>({_ppTvstructKVs(v3._v)})'
 
 
-def test_dstruct():
-    fred = dstruct(N**(N**index), [[1,2]])
-    fred.a = 1
-    fred.b = 2
-    fred['a'] >> PP
-    fred['a'] = 5
-    fred._fred = 1
-    fred = fred | N**(N**index)
-    fred._fred >> PP
-    repr(fred) >> PP
-    str(fred) >> PP
-    for k, v in fred._kvs():
-        f'{(k, v)}' >> PP
+def _ppTvstructKVs(s):
+    itemStrings = (f"{str(k)}={repr(v)}" for k, v in s._kvs())
+    return ", ".join(itemStrings)
+
+
+def test_seq():
+    v1 = _tvseq(N**pyint, [1,2,3])
+    tstseq = BType('tstseq: tstseq & py in py')
+    with assertRaises(TypeError):
+        tstseq([1,2,3])
+    tstseq.setConstructor(_tvseq)
+    v2 = tstseq([1,2,3])
+    with assertRaises(TypeError):
+        (N**pyint)([1,2,3])
+
+    v3 = dseq([1,2])
+    assert v3 >> typeOf >> dseq
+
+    intseq = dseq & (N ** pyint)
+    xs1 = intseq([1,2])
+
+    xs1 >> _v >> check >> equals >> [1, 2]
+    xs1 >> check >> typeOf >> intseq
+    xs2 = 0 >> prependTo >> xs1
+    xs3 = xs2 >> append >> 3
+    xs4 = xs3 >> join >> intseq([4, 5])
+    xs4 >> _v >> check >> equals >> [0, 1, 2, 3, 4, 5]
 
 
 @xfail
-def test_dseq():
-    fred = dseq((N**litint)[dseq], [1, 2])
-    fred >> _v >> check >> equals >> [1, 2]
-    fred >> check >> typeOf >> (N**litint)[dseq]
-    fred = fred >> append >> 3
-    fred = 0 >> prependTo >> fred
-    fred = fred >> join >> dseq((N**litint)[dseq], [4, 5])
-    fred >> _v >> check >> equals >> [0, 1, 2, 3, 4, 5]
-
-
-@xfail
-def test_dmap():
+def test_map():
     DF2 = BType('DF2: DF2 & dmap')
 
     @coppertop
@@ -110,7 +168,7 @@ def test_dmap():
     dm >> kvs >> to >> pylist >> check >> equals >> [('a', 1), ('b', 2)]
 
 
-def test_me():
+def test_frame():
     rx = "rx"; oe = "oe"
     bf1 = dframe(date=[1, 2, 3, 1, 2, 3], asset=[rx, rx, rx, oe, oe, oe])
     bf2 = dframe(date=[1, 2, 3, 1, 2, 3], asset=[rx, rx, rx, oe, oe, oe])
@@ -154,11 +212,11 @@ def test_nd_():
 
 
 def main():
-    test_me()
-    test_dtup()
-    test_dstruct()
-    test_dseq()
-    test_dmap()
+    test_frame()
+    test_tuple()
+    test_struct()
+    test_seq()
+    test_map()
     test_nd_()
 
 

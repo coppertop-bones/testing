@@ -14,6 +14,8 @@ import sys
 if hasattr(sys, '_TRACE_IMPORTS') and sys._TRACE_IMPORTS: print(__name__)
 
 import types, typing
+
+from coppertop.pipe import coppertop, unary, binary
 from coppertop.utils import Missing, assertRaises
 
 MissingType = type(Missing)
@@ -106,9 +108,32 @@ def test_Missing():
     assert isinstance(Missing, int | Missing)
 
 
+@coppertop(dispatchEvenIfAllTypes=True)
+def unaryCountMissing(x):
+    return 1 if x is Missing else 0
+
+@coppertop(style=binary)
+def binaryCountMissing(x, y):
+    num = 0
+    if x is Missing: num += 1
+    if y is Missing: num += 1
+    return num
+
+
+def test_Missing_pipes():
+    assert ('hello' >> Missing) == 'hello'
+    x = Missing >> unaryCountMissing
+    assert (Missing >> unaryCountMissing) == 1
+    assert (1 >> binaryCountMissing >> 2) == 0
+    assert (Missing >> binaryCountMissing >> 2) == 1
+    assert (1 >> binaryCountMissing >> Missing) == 1
+    assert (Missing >> binaryCountMissing >> Missing) == 2
+
+
 
 def main():
     test_Missing()
+    test_Missing_pipes()
 
 
 if __name__ == '__main__':
