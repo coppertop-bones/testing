@@ -9,12 +9,13 @@
 
 import pytest
 type_system = pytest.mark.type_system
+xfail = pytest.mark.xfail
 
-from coppertop.pipe import *
-from bones.ts.metatypes import BType, BTAtom, BTStruct, weaken, updateSchemaVarsWith, fitsWithin as _fitsWithin
+from coppertop.utils import context
+from bones.ts.metatypes import BType, BTAtom, BTStruct, weaken, updateSchemaVarsWith
 import bones.ts.metatypes
 from coppertop.dm.testing import check, fitsWithin, doesNotFitWithin, equals
-from coppertop.dm.core.types import index, count, num, txt, N,  T, T1, T2, T3, T4, num, pylist, pydict, litnum
+from coppertop.dm.core.types import index, count, txt, N,  T, T1, T2, T3, T4, num, pylist, pydict, litnum
 from coppertop.dm.finance.types import ccy
 from coppertop.dm.core.aggman import atAll
 
@@ -125,12 +126,55 @@ def test_schema():
     schemaVars3 >> atAll >> (T1, T2, T3, T4) >> check >> equals >> [accounts, num, positions, account]
 
 
+@type_system
+def test_structural_subtyping_tuples():
+    with context(stop=True):
+        BType('(num)') >> check >> fitsWithin >> BType('()')
+    BType('num') >> check >> doesNotFitWithin >> BType('()')
+    BType('()') >> check >> doesNotFitWithin >> BType('(num)')
+    BType('(txt)') >> check >> doesNotFitWithin >> BType('(num)')
+    BType('(num, int)') >> check >> fitsWithin >> BType('(num)')
+    BType('(num&int)') >> check >> fitsWithin >> BType('(num)')
+
+# what's an operation to extend a tuple? `+`? do we need one?
+# tup3: tup1 with tup2
+# tup4: tup1 withAll (tup2, tup3)
+# tup4: (tup1, tup2, tup3) joinAll
+# same for structs
+# here's the killer question - what are the types of with, withAll and joinAll?
+# with: {[a:(), b:()] <:()>}    // we need a schema var that can to tuple and struct manipulations
+# T1() and T1{} and T1 {{}}?
+# (T1) and {T2} and {{T1}}
+
+@type_system
+def test_structural_subtyping_structs():
+    BType('{x:num}') >> check >> fitsWithin >> BType('{}')
+    BType('{}') >> check >> doesNotFitWithin >> BType('{x:num}')
+    BType('{x:txt}') >> check >> doesNotFitWithin >> BType('{x:num}')
+    BType('{x:num, y:num}') >> check >> fitsWithin >> BType('{x:num}')
+    BType('{y:num, x:num}') >> check >> doesNotFitWithin >> BType('{x:num}')    # order matters for structs
+    BType('{x:num+int}') >> check >> fitsWithin >> BType('{x:num}')
+
+
+@xfail
+@type_system
+def test_structural_subtyping_records():
+    BType('{{x:num}}') >> check >> fitsWithin >> BType('{{}}')
+    BType('{{}}') >> check >> doesNotFitWithin >> BType('{{x:num}}')
+    BType('{{x:txt}}') >> check >> doesNotFitWithin >> BType('{{x:num}}')
+    BType('{{x:num, y:num}}') >> check >> fitsWithin >> BType('{{x:num}}')
+    BType('{{y:num, x:num}}') >> check >> fitsWithin >> BType('{{x:num}}')    # order doesn't matter for records
+    BType('{{x:num+int}}') >> check >> fitsWithin >> BType('{{x:num}}')
+
 
 def main():
     testSimple()
     testNested()
     test_schemaVars()
     test_schema()
+    test_structural_subtyping_tuples()
+    test_structural_subtyping_structs()
+    test_structural_subtyping_records()
 
 
 if __name__ == '__main__':

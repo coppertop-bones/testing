@@ -19,7 +19,7 @@ from coppertop.dm.core.structs import _tvstruct, _tvtuple
 from bones.kernel import lex
 from bones.kernel.errors import BonesGroupingError
 from bones.kernel.parse_groups import parseStructure, TUPLE_NULL, TUPLE_OR_PAREN, TUPLE_2D, TUPLE_0_EMPTY, TUPLE_1_EMPTY, \
-    TUPLE_2_EMPTY, TUPLE_3_EMPTY, TUPLE_4_PLUS_EMPTY, SnippetGrp
+    TUPLE_2_EMPTY, TUPLE_3_EMPTY, TUPLE_4_PLUS_EMPTY, SeqGrp
 
 
 def newKernel():
@@ -73,7 +73,7 @@ def group_(src:txt, k) -> types.FunctionType:
     return lambda : src >> group(_, k)
 
 @coppertop
-def bb(g:SnippetGrp) -> txt:
+def bb(g:SeqGrp) -> txt:
     return g.PPGroup
 
 @coppertop

@@ -131,3 +131,5 @@ dmypy.json
 .DS_Store
 
 tests/bones/analyse
+
+tests/bones/infer
